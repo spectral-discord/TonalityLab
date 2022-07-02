@@ -1,5 +1,6 @@
 tasks:
   - before: cd ./TonalHub
+    init: yarn install
     command: yarn rw dev
 
 ports:
