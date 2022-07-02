@@ -1,0 +1,7 @@
+tasks:
+  - before: cd ./TonalHub
+    command: yarn rw dev
+
+ports:
+  - port: 8910
+    onOpen: open-browser
