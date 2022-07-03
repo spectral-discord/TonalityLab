@@ -1,6 +1,3 @@
-checkoutLocation: TonalHub
-workspaceLocation: .
-
 tasks:
   - name: Terminal
     openMode: split-left
@@ -14,12 +11,9 @@ tasks:
       export RWFW_PATH="/workspace/TonalHub/TonalHub"
       export RWJS_DEV_API_URL="http://localhost"
       export REDWOOD_DISABLE_TELEMETRY=1
-    init: |
       cd /workspace/TonalHub/TonalHub
-      yarn install
-    command: |
-      cd /workspace/rw-test-app
-      yarn rw dev
+    init: yarn install
+    command: yarn rw dev
 
 ports:
   - port: 8910
