@@ -12,6 +12,7 @@ tasks:
 ports:
   - port: 8910
     onOpen: open-browser
+    visibility: public
   - port: 8911
     onOpen: ignore
     visibility: public
