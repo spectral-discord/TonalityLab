@@ -1,19 +1,13 @@
 tasks:
   - name: Terminal
     openMode: split-left
-    before: |
-      export RWFW_PATH="/workspace/TonalHub"
-      export RWJS_DEV_API_URL="http://localhost"
-      cd /workspace/TonalHub/TonalHub
+    before: cd /workspace/TonalHub/TonalHub
   - name: "Dev Servers"
     openMode: split-right
     before: |
-      export RWFW_PATH="/workspace/TonalHub/TonalHub"
-      export RWJS_DEV_API_URL="http://localhost"
-      export REDWOOD_DISABLE_TELEMETRY=1
       cd /workspace/TonalHub/TonalHub
     init: yarn install
-    command: yarn rw dev
+    command: yarn rw dev --fwd="--allowed-hosts $(gp url 8910 | sed -e "s/https:\/\///g") --allowed-hosts localhost"
 
 ports:
   - port: 8910
