@@ -7,7 +7,7 @@ tasks:
     before: |
       cd /workspace/TonalHub/TonalHub
     init: yarn install
-    command: yarn rw dev --fwd="--allowed-hosts localhost --allowed-hosts $(gp url 8910 | sed -e "s/https:\/\///g") --host 0.0.0.0 --client-web-socket-url=$(gp url 8910 | sed -e "s/https/wss/g")"
+    command: yarn rw dev --fwd="--allowed-hosts localhost --allowed-hosts $(gp url 8910 | sed -e "s/https:\/\///g") --client-web-socket-url=$(gp url 8910 | sed -e "s/https/wss/g")/ws"
 
 ports:
   - port: 8910
