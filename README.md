@@ -1,1 +1,1 @@
-# TonalHub
+# Tonality Lab
