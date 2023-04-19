@@ -8,11 +8,95 @@ generator client {
   binaryTargets = "native"
 }
 
-// Define your own datamodels here and run `yarn redwood prisma migrate dev`
-// to create migrations for them and apply to your dev DB.
-// TODO: Please remove the following example:
-model UserExample {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model User {
+  // Generated user data
+  id              Int         @id @default(autoincrement())
+  apiToken        String      @default(cuid())
+
+  // Optional user data
+  email           String?
+  name            String?
+
+  // TSON relations
+  tunings         Tuning[]
+  spectra         Spectrum[]
+  sets            Set[]
+}
+
+model Tuning {
+  // TonalityLab data
+  id              String      @id @default(cuid())
+  author          User        @relation(fields: [authorId], references: [id])
+  authorId        Int
+  public          Boolean     @default(false)
+
+  // TSON data
+  name            String?
+  description     String?
+  tson            String
+
+  // TSON relations
+  sets            Set[]
+  spectra         Spectrum[]
+
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Versioning relations
+  // parent          Tuning?     @relation("Versions", fields: [parentId], references: [id])
+  // parentId        String?
+  // children        Tuning[]    @relation("Versions")
+}
+
+model Spectrum {
+  // TonalityLab data
+  id              String      @id @default(cuid())
+  author          User        @relation(fields: [authorId], references: [id])
+  authorId        Int
+  public          Boolean     @default(false)
+
+  // TSON data
+  name            String?
+  description     String?
+  tson            String
+
+  // TSON relations
+  sets            Set[]
+  tunings         Tuning[]
+
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Versioning relations
+  // parent          Spectrum?   @relation("Versions", fields: [parentId], references: [id])
+  // parentId        String?
+  // children        Spectrum[]  @relation("Versions")
+}
+
+model Set {
+  // TonalityLab data
+  id              String      @id @default(cuid())
+  author          User        @relation(fields: [authorId], references: [id])
+  authorId        Int
+  public          Boolean     @default(false)
+
+  // TSON data
+  name            String?
+  description     String?
+  tson            String
+
+  // TSON relations
+  spectra         Spectrum[]
+  tunings         Tuning[]
+
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Versioning relations
+  // parent          Set?        @relation("Versions", fields: [parentId], references: [id])
+  // parentId        String?
+  // children        Set[]       @relation("Versions")
 }
