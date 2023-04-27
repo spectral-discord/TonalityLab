@@ -11,10 +11,9 @@ generator client {
 model User {
   // Generated user data
   id              Int         @id @default(autoincrement())
-  apiToken        String      @default(nanoid(15))
+  apiToken        String      @unique @default(nanoid(15))
 
   // Optional user data
-  email           String?
   name            String?
 
   // TSON relations
