@@ -1,16 +1,24 @@
+image:
+  file: .gitpod.Dockerfile
+
 tasks:
-  - name: Terminal
-    before: cd /workspace/TonalityLab/TonalityLab
-    command: alias rw='yarn redwood'
-  - name: "Dev Servers"
+  - name: Dev Servers
     before: cd /workspace/TonalityLab/TonalityLab
     init: yarn install
     command: yarn rw dev --fwd="--client-web-socket-url=ws$(gp url 8910 | cut -c 5-)/ws"
 
+  - name: Terminal
+    before: cd /workspace/TonalityLab/TonalityLab
+
 ports:
+  - port: 5432
+    name: DB
+    onOpen: ignore
   - port: 8910
+    name: WebUI
     onOpen: open-browser
     visibility: public
   - port: 8911
+    name: API
     onOpen: ignore
     visibility: public
