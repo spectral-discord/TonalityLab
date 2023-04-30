@@ -11,7 +11,8 @@ generator client {
 model User {
   // Generated user data
   id              Int         @id @default(autoincrement())
-  apiToken        String      @unique @default(nanoid(15))
+  // apiToken        String      @unique @default(nanoid(15))
+  apiToken        String      @unique @default(cuid())
 
   // Optional user data
   name            String?
@@ -24,7 +25,8 @@ model User {
 
 model Tuning {
   // TonalityLab data
-  id              String      @id @default(nanoid(10))
+  // id              String      @id @default(nanoid(10))
+  id              String      @id @default(cuid())
   author          User        @relation(fields: [authorId], references: [id])
   authorId        Int
   public          Boolean     @default(false)
@@ -50,7 +52,8 @@ model Tuning {
 
 model Spectrum {
   // TonalityLab data
-  id              String      @id @default(nanoid(10))
+  // id              String      @id @default(nanoid(10))
+  id              String      @id @default(cuid())
   author          User        @relation(fields: [authorId], references: [id])
   authorId        Int
   public          Boolean     @default(false)
@@ -76,7 +79,8 @@ model Spectrum {
 
 model Set {
   // TonalityLab data
-  id              String      @id @default(nanoid(10))
+  // id              String      @id @default(nanoid(10))
+  id              String      @id @default(cuid())
   author          User        @relation(fields: [authorId], references: [id])
   authorId        Int
   public          Boolean     @default(false)
