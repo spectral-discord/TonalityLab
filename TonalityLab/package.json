@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "migrate": "yarn rw prisma migrate dev"
+  },
   "private": true,
   "workspaces": {
     "packages": [
