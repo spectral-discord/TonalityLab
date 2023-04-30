@@ -66,7 +66,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   return (
   <div className="h-screen bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
-    <Navbar className="bg-white dark:bg-slate-900 mx-auto max-w-screen-xl py-2 px-4 lg:px-8 lg:py-4">
+    <Navbar className="text-white bg-violet-700 dark:bg-slate-900 mx-auto max-w-screen-xl py-2 px-4 lg:px-8 lg:py-4">
       <div className="container mx-auto flex items-center justify-between">
         <Link to={routes.home()}>
           <Typography className="mr-4 cursor-pointer py-1.5 font-normal">
