@@ -1,5 +1,4 @@
-ARG base
-FROM ${base}
+FROM gitpod/workspace-full:latest
 
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=3
