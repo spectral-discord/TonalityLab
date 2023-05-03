@@ -2,16 +2,13 @@ image: gitpod/workspace-postgres:latest
 
 tasks:
   - name: Dev Servers
-    before: cd /workspace/TonalityLab/TonalityLab
     init: yarn install
     command: yarn rw dev --fwd="--client-web-socket-url=ws$(gp url 8910 | cut -c 5-)/ws"
 
   - name: Prisma Studio
-    before: cd /workspace/TonalityLab/TonalityLab
     command: yarn rw prisma studio
 
   - name: Terminal
-    before: cd /workspace/TonalityLab/TonalityLab
 
 ports:
   - port: 5432
