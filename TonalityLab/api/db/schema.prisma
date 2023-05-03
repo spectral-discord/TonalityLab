@@ -12,7 +12,7 @@ model User {
   // Generated user data
   id              Int         @id @default(autoincrement())
   // apiToken        String      @unique @default(nanoid(15))
-  apiToken        String      @unique @default(cuid())
+  apiToken        String      @unique @default(dbgenerated("nanoid(15)")) @db.VarChar(15)
 
   // Optional user data
   name            String?
@@ -26,7 +26,7 @@ model User {
 model Tuning {
   // TonalityLab data
   // id              String      @id @default(nanoid(10))
-  id              String      @id @default(cuid())
+  id              String      @id @default(dbgenerated("nanoid(10)")) @db.VarChar(10)
   author          User        @relation(fields: [authorId], references: [id])
   authorId        Int
   public          Boolean     @default(false)
@@ -53,7 +53,7 @@ model Tuning {
 model Spectrum {
   // TonalityLab data
   // id              String      @id @default(nanoid(10))
-  id              String      @id @default(cuid())
+  id              String      @id @default(dbgenerated("nanoid(10)")) @db.VarChar(10)
   author          User        @relation(fields: [authorId], references: [id])
   authorId        Int
   public          Boolean     @default(false)
@@ -80,7 +80,7 @@ model Spectrum {
 model Set {
   // TonalityLab data
   // id              String      @id @default(nanoid(10))
-  id              String      @id @default(cuid())
+  id              String      @id @default(dbgenerated("nanoid(10)")) @db.VarChar(10)
   author          User        @relation(fields: [authorId], references: [id])
   authorId        Int
   public          Boolean     @default(false)
