@@ -12,7 +12,7 @@ DECLARE
 BEGIN
   WHILE i < size LOOP
     byte := get_byte(bytes, i);
-    pos := (byte & 63) + 1; -- + 1 because substr starts at 1 for some reason
+    pos := (byte & 61) + 1; -- + 1 because substr starts at 1 for some reason
     id := id || substr(urlAlphabet, pos, 1);
     i = i + 1;
   END LOOP;
