@@ -7,21 +7,25 @@ import Routes from 'src/Routes'
 import './index.css'
 
 const App = () => {
-  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  if (
+    localStorage.theme === 'dark' ||
+    (!('theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches)
+  ) {
     document.documentElement.classList.add('dark')
   } else {
     document.documentElement.classList.remove('dark')
   }
 
   return (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-      <RedwoodApolloProvider>
-        <Routes />
-      </RedwoodApolloProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
+    <FatalErrorBoundary page={FatalErrorPage}>
+      <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+        <RedwoodApolloProvider>
+          <Routes />
+        </RedwoodApolloProvider>
+      </RedwoodProvider>
+    </FatalErrorBoundary>
+  )
 }
 
 export default App

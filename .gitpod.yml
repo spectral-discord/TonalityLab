@@ -7,19 +7,13 @@ tasks:
 
   - name: Prisma Studio
     command: |
+      sleep 5s
       yarn migrate
       yarn rw prisma studio
 
   - name: Terminal
 
 ports:
-  - port: 5432
-    name: DB
-    onOpen: ignore
-  - port: 5555
-    name: Prisma Studio
-    onOpen: open-browser
-    visibility: public
   - port: 8910
     name: WebUI
     onOpen: open-browser
@@ -27,4 +21,11 @@ ports:
   - port: 8911
     name: API
     onOpen: ignore
+    visibility: public
+  - port: 5432
+    name: DB
+    onOpen: ignore
+  - port: 5555
+    name: Prisma Studio
+    onOpen: open-browser
     visibility: public
