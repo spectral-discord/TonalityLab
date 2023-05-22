@@ -44,8 +44,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   const navList = (
     <ul className="mb-2 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-10">
-      <span className="flex items-center">One Link</span>
-      <span className="flex items-center">Another</span>
+      <li className="flex items-center">One Link</li>
+      <li className="flex items-center">Another</li>
     </ul>
   )
 
