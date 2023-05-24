@@ -6,7 +6,7 @@ module.exports = {
       black: '#101010',
       white: '#fefdfd',
       purple: '#5f43b2',
-      pink: '#bd257b',
+      pink: '#c347d9',
       'gray-dark': '#313153',
       'gray-light': '#b1aebb',
     },
