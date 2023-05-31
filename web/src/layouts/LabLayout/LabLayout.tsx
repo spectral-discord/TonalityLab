@@ -16,7 +16,7 @@ const LabLayout = ({ children }: LabLayoutProps) => {
       (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
   )
 
-  const hamburgerLineStyle = 'h-0.5 w-5 my-0.5 rounded-full bg-black dark:bg-white transition ease transform duration-300'
+  const hamburgerLineStyle = 'h-0.5 w-5 my-0.5 rounded-full bg-black dark:bg-white transition ease transform duration-300 motion-reduce:duration-0'
 
   const navLinks = [
     {
