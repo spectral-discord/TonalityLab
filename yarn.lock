@@ -305,6 +305,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@axe-core/react@npm:^4.7.1":
+  version: 4.7.1
+  resolution: "@axe-core/react@npm:4.7.1"
+  dependencies:
+    axe-core: ^4.7.0
+    requestidlecallback: ^0.3.0
+  checksum: 351835f3870072a9c05e9f95f5dcc2963ea30f4c06a6573f2b25505fc829da30d536786369b6be75b4c0897a1efd820cd5cdde95675aef0bef49c7d85a3c882f
+  languageName: node
+  linkType: hard
+
 "@babel/cli@npm:7.21.5":
   version: 7.21.5
   resolution: "@babel/cli@npm:7.21.5"
@@ -8399,6 +8409,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axe-core@npm:^4.7.0":
+  version: 4.7.2
+  resolution: "axe-core@npm:4.7.2"
+  checksum: 8dfc61f038fbd9623ae8a264c8a475d887113a027fb440a2b377b82ffd300e71d1a0bcf042ff13b517a8d548b34c44b4159eff693725c5d7cde240d0aa68feac
+  languageName: node
+  linkType: hard
+
 "axobject-query@npm:^3.1.1":
   version: 3.1.1
   resolution: "axobject-query@npm:3.1.1"
@@ -12176,7 +12193,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsx-a11y@npm:6.7.1":
+"eslint-plugin-jsx-a11y@npm:6.7.1, eslint-plugin-jsx-a11y@npm:^6.7.1":
   version: 6.7.1
   resolution: "eslint-plugin-jsx-a11y@npm:6.7.1"
   dependencies:
@@ -20961,6 +20978,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"requestidlecallback@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "requestidlecallback@npm:0.3.0"
+  checksum: 68a2ff3154788643ccf96436cfaf8ad5bbe2f4d3f4b4d7858ec74681bf7d6a487d17df6a238130ff1e73d0a4a85bdc44b5f945eb79ef7d5552e23fc6288e795f
+  languageName: node
+  linkType: hard
+
 "require-directory@npm:^2.1.1":
   version: 2.1.1
   resolution: "require-directory@npm:2.1.1"
@@ -21253,7 +21277,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@axe-core/react": ^4.7.1
     "@redwoodjs/core": 5.2.1
+    eslint-plugin-jsx-a11y: ^6.7.1
     prettier-plugin-tailwindcss: ^0.2.8
   languageName: unknown
   linkType: soft

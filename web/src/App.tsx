@@ -4,6 +4,12 @@ import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
+if (process.env.NODE_ENV !== 'production') {
+  const ReactDOM = require('react-dom')
+  const axe = require('@axe-core/react')
+  axe(React, ReactDOM, 1000)
+}
+
 import './index.css'
 
 const App = () => {
