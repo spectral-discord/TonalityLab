@@ -8,8 +8,16 @@ export const schema = gql`
     sets: [Set]!
   }
 
+  type SanitizedUser {
+    id: Int!
+    name: String
+    tunings: [Tuning]!
+    spectra: [Spectrum]!
+    sets: [Set]!
+  }
+
   type Query {
-    user(id: Int!): User @requireAuth
+    user(id: Int!): SanitizedUser
   }
 
   input CreateUserInput {
