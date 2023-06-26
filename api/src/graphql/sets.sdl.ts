@@ -14,8 +14,8 @@ export const schema = gql`
   }
 
   type Query {
-    sets: [Set!]! @requireAuth
-    set(id: String!): Set @requireAuth
+    sets: [Set!]!
+    set(id: String!): Set
   }
 
   input CreateSetInput {
@@ -27,7 +27,6 @@ export const schema = gql`
   }
 
   input UpdateSetInput {
-    authorId: Int
     public: Boolean
     name: String
     description: String

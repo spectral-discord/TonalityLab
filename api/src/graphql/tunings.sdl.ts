@@ -14,8 +14,8 @@ export const schema = gql`
   }
 
   type Query {
-    tunings: [Tuning!]! @requireAuth
-    tuning(id: String!): Tuning @requireAuth
+    tunings: [Tuning!]!
+    tuning(id: String!): Tuning
   }
 
   input CreateTuningInput {
@@ -27,7 +27,6 @@ export const schema = gql`
   }
 
   input UpdateTuningInput {
-    authorId: Int
     public: Boolean
     name: String
     description: String
