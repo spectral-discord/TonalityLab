@@ -2,10 +2,6 @@ import type { QueryResolvers, MutationResolvers, UserRelationResolvers } from 't
 
 import { db } from 'src/lib/db'
 
-export const users: QueryResolvers['users'] = () => {
-  return db.user.findMany()
-}
-
 export const user: QueryResolvers['user'] = ({ id }) => {
   return db.user.findUnique({
     where: { id }

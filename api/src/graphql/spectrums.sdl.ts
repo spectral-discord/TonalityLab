@@ -14,8 +14,8 @@ export const schema = gql`
   }
 
   type Query {
-    spectrums: [Spectrum!]!
-    spectrum(id: String!): Spectrum
+    spectrums: [Spectrum!]! @skipAuth
+    spectrum(id: String!): Spectrum @skipAuth
   }
 
   input CreateSpectrumInput {

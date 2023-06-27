@@ -14,8 +14,8 @@ export const schema = gql`
   }
 
   type Query {
-    sets: [Set!]!
-    set(id: String!): Set
+    sets: [Set!]! @skipAuth
+    set(id: String!): Set @skipAuth
   }
 
   input CreateSetInput {

@@ -8,16 +8,8 @@ export const schema = gql`
     sets: [Set]!
   }
 
-  type SanitizedUser {
-    id: Int!
-    name: String
-    tunings: [Tuning]!
-    spectra: [Spectrum]!
-    sets: [Set]!
-  }
-
   type Query {
-    user(id: Int!): SanitizedUser
+    user(id: Int!): User @skipAuth
   }
 
   input CreateUserInput {
@@ -29,7 +21,7 @@ export const schema = gql`
   }
 
   type Mutation {
-    createUser(input: CreateUserInput!): User!
+    createUser(input: CreateUserInput!): User! @skipAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
   }

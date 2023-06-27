@@ -14,8 +14,8 @@ export const schema = gql`
   }
 
   type Query {
-    tunings: [Tuning!]!
-    tuning(id: String!): Tuning
+    tunings: [Tuning!]! @skipAuth
+    tuning(id: String!): Tuning @skipAuth
   }
 
   input CreateTuningInput {
