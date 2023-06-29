@@ -19,14 +19,8 @@ const LabLayout = ({ children }: LabLayoutProps) => {
   const hamburgerLineStyle = 'h-0.5 w-5 my-0.5 rounded-full bg-black dark:bg-white transition ease transform duration-300 motion-reduce:duration-0'
 
   const navLinks = [
-    {
-      title: 'One Link',
-      destination: routes.home({ t: 'a' })
-    },
-    {
-      title: 'Another',
-      destination: routes.home({ t: 'b' })
-    }
+    { title: 'Tunings', destination: routes.tunings() },
+    { title: 'Another', destination: routes.home({ t: 'b' }) }
   ]
 
   useEffect(() => {
