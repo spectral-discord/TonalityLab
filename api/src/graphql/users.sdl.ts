@@ -1,7 +1,6 @@
 export const schema = gql`
   type User {
     id: Int!
-    apiToken: String!
     name: String
     tunings: [Tuning]!
     spectra: [Spectrum]!
