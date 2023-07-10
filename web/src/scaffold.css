@@ -1,0 +1,206 @@
+.rw-segment {
+  @apply border-black dark:border-purple w-full overflow-hidden rounded-lg border;
+  scrollbar-color: theme('colors.gray-light') transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  @apply border-gray-light bg-opacity-0 rounded-b-[10px] rounded-t-none border-0 border-t border-solid p-[2px];
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  @apply bg-gray-dark border-opacity-0 rounded-full border-[3px] border-solid bg-clip-content;
+}
+.rw-segment-header {
+  @apply border-black dark:border-purple border-b px-4 py-3;
+}
+.rw-link {
+  @apply text-purple underline;
+}
+.rw-link:hover {
+  @apply text-purple;
+}
+.rw-heading {
+  @apply font-semibold;
+}
+.rw-heading.rw-heading-primary {
+  @apply text-xl;
+}
+.rw-heading.rw-heading-secondary {
+  @apply text-sm;
+}
+.rw-heading .rw-link {
+  @apply text-white no-underline;
+}
+.rw-cell-error {
+  @apply text-sm font-semibold;
+}
+.rw-form-wrapper {
+  @apply -mt-4 text-sm;
+}
+.rw-cell-error,
+.rw-form-error-wrapper {
+  @apply bg-gray-light text-pink border-pink my-4 rounded border p-4;
+}
+.rw-form-error-title {
+  @apply m-0 font-semibold;
+}
+.rw-form-error-list {
+  @apply mt-2 list-inside list-disc;
+}
+.rw-button {
+  @apply bg-gray-light text-gray-dark flex cursor-pointer rounded border-0 px-4 py-1 text-xs font-semibold leading-loose tracking-wide no-underline transition duration-100;
+}
+.rw-button:hover {
+  @apply bg-gray-dark text-white;
+}
+.rw-button.rw-button-small {
+  @apply rounded-sm px-2 py-1 text-xs;
+}
+.rw-button.rw-button-green {
+  @apply bg-purple text-white;
+}
+.rw-button.rw-button-green:hover {
+  @apply bg-purple;
+}
+.rw-button.rw-button-blue {
+  @apply bg-purple text-white;
+}
+.rw-button.rw-button-blue:hover {
+  @apply bg-purple;
+}
+.rw-button.rw-button-red {
+  @apply bg-pink text-white;
+}
+.rw-button.rw-button-red:hover {
+  @apply bg-pink text-white;
+}
+.rw-button-icon {
+  @apply mr-1 text-xl leading-5;
+}
+.rw-button-group {
+  @apply mx-2 my-3 flex justify-center;
+}
+.rw-button-group .rw-button {
+  @apply mx-1;
+}
+.rw-form-wrapper .rw-button-group {
+  @apply mt-8;
+}
+.rw-label {
+  @apply mt-6 block text-left font-semibold;
+}
+.rw-label.rw-label-error {
+  @apply text-pink;
+}
+.rw-input {
+  @apply border-black dark:border-purple mt-2 block w-full rounded border bg-white dark:bg-gray-dark-accent p-2 focus:outline-none focus:ring-pink focus:ring-2 focus:ring-offset-2 dark:ring-offset-gray-dark;
+}
+.rw-check-radio-items {
+  @apply flex justify-items-center;
+}
+.rw-check-radio-item-none {
+  @apply text-gray-dark;
+}
+.rw-input[type='checkbox'],
+.rw-input[type='radio'] {
+  @apply ml-0 mr-1 mt-1 inline w-4;
+}
+.rw-input-error {
+  @apply border-pink text-pink;
+}
+.rw-input-error:focus {
+  @apply border-pink outline-none;
+  box-shadow: 0 0 5px #c53030;
+}
+.rw-field-error {
+  @apply text-pink mt-1 block text-xs font-semibold uppercase;
+}
+.rw-table {
+  @apply w-full text-sm;
+}
+.rw-table th,
+.rw-table td {
+  @apply p-3;
+}
+.rw-table td {
+  @apply dark:bg-gray-dark bg-white;
+}
+.rw-table tr:nth-child(odd) td {
+  @apply dark:bg-gray-dark-accent bg-white-accent;
+}
+.rw-table th {
+  @apply text-left font-semibold whitespace-nowrap;
+}
+.rw-table thead th {
+  @apply text-left;
+}
+.rw-table tbody th {
+  @apply text-right;
+}
+@media (min-width: 768px) {
+  .rw-table tbody th {
+    @apply w-1/5;
+  }
+}
+.rw-table tbody tr {
+  @apply dark:border-purple border-black border-t;
+}
+.rw-table input {
+  @apply ml-0;
+}
+.rw-table-actions {
+  @apply flex h-4 items-center justify-end pr-1;
+}
+.rw-table-actions .rw-button {
+  @apply bg-opacity-0;
+}
+.rw-table-actions .rw-button:hover {
+  @apply bg-gray-dark text-white;
+}
+.rw-table-actions .rw-button-blue {
+  @apply text-purple;
+}
+.rw-table-actions .rw-button-blue:hover {
+  @apply bg-purple text-white;
+}
+.rw-table-actions .rw-button-red {
+  @apply text-pink;
+}
+.rw-table-actions .rw-button-red:hover {
+  @apply bg-pink text-white;
+}
+.rw-text-center {
+  @apply text-center;
+}
+.rw-login-container {
+  @apply mx-auto my-16 flex w-96 flex-wrap items-center justify-center;
+}
+.rw-login-container .rw-form-wrapper {
+  @apply w-full text-center;
+}
+.rw-login-link {
+  @apply text-gray-dark mt-4 w-full text-center text-sm;
+}
+.rw-webauthn-wrapper {
+  @apply mx-4 mt-6 leading-6;
+}
+.rw-webauthn-wrapper h2 {
+  @apply mb-4 text-xl font-bold;
+}
+
+.hamburger-line {
+  @apply h-0.5 w-5 my-0.5 rounded-full bg-black dark:bg-white transition ease-in-out transform duration-300 motion-reduce:duration-0;
+}
+
+.icon-button {
+  @apply cursor-pointer hover:text-purple hover:dark:text-pink;
+}
+
+.icon {
+  @apply h-6 w-6 stroke-2;
+}
+
+.monaco-editor, .overflow-guard {
+  @apply rounded-b-lg;
+}
