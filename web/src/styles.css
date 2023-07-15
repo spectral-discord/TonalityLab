@@ -259,7 +259,7 @@
   @apply dark:!bg-purple dark:opacity-50;
 }
 
-.monaco-editor .margin-view-overlays, .monaco-editor-background {
+.monaco-editor .margin-view-overlays, .monaco-editor .monaco-editor-background, .monaco-editor .margin, .monaco-editor .overflow-guard {
   @apply dark:bg-editor-gray;
 }
 
