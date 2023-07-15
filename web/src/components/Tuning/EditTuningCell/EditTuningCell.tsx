@@ -84,7 +84,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
   return (
     <div className={`rw-segment overflow-visible ${useEditor ? 'flex grow flex-col' : 'h-fit'}`}>
       <header className="rw-segment-header flex w-full items-center">
-        <h2 className="rw-heading flex grow flex-wrap">
+        <h2 className="rw-heading flex grow flex-wrap items-center">
           <span className="mr-2 truncate">{tuning?.name}</span>
           <span className="text-sm text-pink">[ tuning ]</span>
         </h2>
