@@ -1,3 +1,15 @@
+.main-layout {
+  @apply flex min-h-screen flex-col bg-white text-black dark:bg-gray-dark dark:text-white;
+}
+
+.nav-bar {
+  @apply z-50 flex-none sticky top-0 max-w-full border-b border-gray-dark bg-white px-4 pb-1 pt-2 text-lg backdrop-blur-sm dark:border-purple dark:bg-gray-dark md:px-8 md:pb-2 md:pt-3;
+}
+
+.home-link {
+  @apply mr-4 inline-block cursor-pointer hover:text-purple hover:dark:text-pink;
+}
+
 .rw-segment {
   @apply border-black dark:border-purple w-full overflow-hidden rounded-lg border;
   scrollbar-color: theme('colors.gray-light') transparent;
@@ -12,7 +24,7 @@
   @apply bg-gray-dark border-opacity-0 rounded-full border-[3px] border-solid bg-clip-content;
 }
 .rw-segment-header {
-  @apply border-black dark:border-purple border-b px-4 py-3;
+  @apply border-black dark:border-purple border-b px-4 py-1 mt-0.5;
 }
 .rw-link {
   @apply text-purple underline;
@@ -203,4 +215,98 @@
 
 .monaco-editor, .overflow-guard {
   @apply rounded-b-lg;
+  --vscode-scrollbar-shadow: none;
+}
+
+.monaco-editor {
+  --vscode-tree-indentGuidesStroke: theme(colors.purple);
+  --vscode-tree-inactiveIndentGuidesStroke: theme(colors.gray-dark-accent);
+}
+
+.monaco-editor .mtk22 {
+  @apply !text-pink;
+}
+
+.monaco-editor .mtk7 {
+  @apply !text-purple dark:!text-purple-light;
+}
+
+.monaco-editor .mtk5 {
+  @apply !text-black dark:!text-white;
+}
+
+.monaco-editor .mtk1 {
+  @apply !text-black dark:!text-white-accent;
+}
+
+.monaco-editor .mtk8 {
+  @apply !text-black dark:!text-white-accent opacity-80 italic;
+}
+
+.monaco-editor .monaco-hover {
+  @apply !bg-white dark:!bg-editor-gray !text-black dark:!text-white !border-black dark:!border-purple;
+}
+
+.monaco-editor .actions {
+  @apply !bg-white dark:!bg-editor-gray !text-black dark:!text-white;
+}
+
+.monaco-editor .monaco-hover a {
+  @apply !text-purple dark:!text-pink;
+}
+
+.monaco-editor .slider {
+  @apply dark:!bg-purple dark:opacity-50;
+}
+
+.monaco-editor .margin-view-overlays, .monaco-editor-background {
+  @apply dark:bg-editor-gray;
+}
+
+.monaco-editor .line-numbers {
+  @apply !text-black dark:!text-white !opacity-70;
+}
+
+.monaco-editor .active-line-number {
+  @apply !opacity-100;
+}
+
+.monaco-editor .action-item {
+  @apply dark:text-white dark:hover:text-pink;
+}
+
+.monaco-editor .peekview-title .filename, .monaco-editor .descriptioncontainer .source, .monaco-editor .descriptioncontainer .code {
+  @apply hidden;
+}
+
+.monaco-editor .peekview-title .dirname {
+  @apply dark:!text-white;
+}
+
+.monaco-editor .body {
+  @apply dark:!bg-editor-gray dark:text-white dark:bg-opacity-100
+}
+
+.monaco-editor .cursor {
+  @apply dark:!bg-white;
+}
+
+.monaco-editor .view-overlays .current-line {
+  @apply !border-purple dark:!border-0 !opacity-20 dark:!bg-purple;
+}
+
+.monaco-editor .selected-text, .monaco-editor .wordHighlightText {
+  @apply !bg-purple opacity-30 dark:opacity-40;
+}
+
+.monaco-editor .scrollbar .vertical {
+  @apply !shadow-none !shadow-inner;
+}
+
+.monaco-editor .lines-content .core-guide-indent-active {
+  @apply !shadow-pink !shadow-[1px_0_0_0_inset] opacity-60 dark:opacity-100;
+}
+
+.monaco-editor .lines-content .core-guide-indent {
+  @apply !shadow-purple !shadow-[1px_0_0_0_inset] opacity-60 dark:opacity-100;
 }

@@ -68,7 +68,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
   return (
     <div className={`rw-segment overflow-visible ${useEditor ? 'flex grow flex-col' : 'h-fit'}`}>
       <header className="rw-segment-header">
-        <h2 className="rw-heading">Edit {tuning?.name} (Tuning)</h2>
+        <h2 className="rw-heading pr-8">Edit tuning: {tuning?.name}</h2>
         <button
           className="icon-button float-right -mt-6 inline-block"
           onClick={() => setUseEditor(!useEditor)}

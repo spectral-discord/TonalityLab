@@ -39,7 +39,7 @@ const Tuning = ({ tuning }: Props) => {
   }
 
   return (
-    <>
+    <div className="w-full">
       <nav className="rw-button-group float-right -mt-0.5">
         <Link to={routes.editTuning({ id: tuning.id })} className="rw-button rw-button-blue">
           Edit
@@ -56,7 +56,7 @@ const Tuning = ({ tuning }: Props) => {
       <div className="flex">
         
       </div>
-    </>
+    </div>
   )
 }
 

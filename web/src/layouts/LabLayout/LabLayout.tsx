@@ -22,7 +22,7 @@ const LabLayout = ({ children }: LabLayoutProps) => {
   ]
 
   useEffect(() => {
-    window.addEventListener('resize', () => window.innerWidth >= 960 && setOpenNav(false))
+    window.addEventListener('resize', () => window.innerWidth >= 768 && setOpenNav(false))
   }, [])
 
   const toggleTheme = () => {
@@ -39,21 +39,21 @@ const LabLayout = ({ children }: LabLayoutProps) => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-black dark:bg-gray-dark dark:text-white">
+    <div className="main-layout">
       <SkipNavLink />
-      <nav className={`flex-none sticky top-0 max-w-full border-b border-gray-dark bg-white px-4 pb-1 pt-2 text-lg backdrop-blur-sm dark:border-purple dark:bg-gray-dark lg:px-8 lg:pb-2 lg:pt-3 ${openNav && 'h-screen sm:h-fit'}`}>
-        <Link to={routes.home()} className="mr-4 inline-block cursor-pointer hover:text-purple hover:dark:text-pink">
+      <nav className={`nav-bar ${openNav && 'h-screen sm:h-fit'}`}>
+        <Link to={routes.home()} className="home-link">
           TonalityLab
         </Link>
         <button
-          className="icon-button float-right hidden lg:inline-block lg:pt-0.5"
+          className="icon-button float-right hidden md:inline-block md:pt-0.5"
           onClick={toggleTheme}
           aria-label={`${darkMode ? 'light' : 'dark'} mode toggle`}
         >
           {darkMode ? <MoonSat className="icon" /> : <SunLight className="icon" />}
         </button>
         <button
-          className="float-right flex h-6 w-6 flex-col items-center justify-center lg:hidden"
+          className="float-right flex h-6 w-6 flex-col items-center justify-center md:hidden"
           onClick={() => setOpenNav(!openNav)}
           aria-label={`${openNav ? 'close' : 'open'} navigation menu`}
         >
@@ -61,8 +61,8 @@ const LabLayout = ({ children }: LabLayoutProps) => {
           <div className={`hamburger-line ${openNav && 'opacity-0'}`} />
           <div className={`hamburger-line ${openNav && '-translate-y-1.5 -rotate-45'}`} />
         </button>
-        <div className={`lg:ml-16 lg:inline-block ${!openNav && 'hidden'}`}>
-          <ul className="mb-2 mt-2 flex flex-col gap-2 px-1 lg:mb-0 lg:mt-0 lg:flex-row lg:gap-10">
+        <div className={`md:ml-16 md:inline-block ${!openNav && 'hidden'}`}>
+          <ul className="mb-2 mt-2 flex flex-col gap-2 px-1 md:mb-0 md:mt-0 md:flex-row md:gap-10">
             {navLinks.map(navLink => (
               <li className="flex px-3" key={`Link to ${navLink.title}`}>
                 <NavLink
@@ -74,9 +74,9 @@ const LabLayout = ({ children }: LabLayoutProps) => {
                 </NavLink>
               </li>
             ))}
-            <li className="flex border-t border-gray-dark px-3 dark:border-purple dark:bg-gray-dark lg:px-0">
+            <li className="flex border-t border-gray-dark px-3 dark:border-purple dark:bg-gray-dark md:px-0">
               <button
-                className="icon-button pt-3.5 lg:hidden"
+                className="icon-button pt-3.5 md:hidden"
                 onClick={toggleTheme}
                 aria-label={`${darkMode ? 'light' : 'dark'} mode toggle`}
               >
@@ -95,7 +95,7 @@ const LabLayout = ({ children }: LabLayoutProps) => {
         </div>
       </nav>
       <SkipNavContent />
-      <main className={`flex grow px-4 py-6 lg:px-6 lg:py-8 ${openNav && 'hidden sm:block'}`}>{children}</main>
+      <main className={`flex grow px-4 py-6 md:px-6 md:py-8 ${openNav && 'hidden sm:block'}`}>{children}</main>
     </div>
   )
 }

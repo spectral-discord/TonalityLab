@@ -38,7 +38,7 @@ const TuningsList = ({ tunings }: FindTunings) => {
   */
 
   return (
-    <div className="rw-segment rw-table-wrapper-responsive">
+    <div className="rw-segment rw-table-wrapper-responsive h-fit">
       <table className="rw-table">
         <thead>
           <tr>

@@ -28,7 +28,6 @@ const TSONEditor = ({
   const divEl = useRef<HTMLDivElement>(null)
   let tsonEditor: editor.IStandaloneCodeEditor
   const modelUri = Uri.parse(schemaUrl)
-  const model = editor.createModel(tson, 'yaml', modelUri)
 
   window.onresize = () => {
     tsonEditor.layout({} as editor.IDimension)
@@ -49,13 +48,28 @@ const TSONEditor = ({
   })
 
   useEffect(() => {
+    const model = editor.createModel(tson, 'yaml', modelUri)
+
     if (divEl.current) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      tsonEditor = editor.create(divEl.current, { language: 'yaml', model, automaticLayout: true })
+      tsonEditor = editor.create(divEl.current, {
+        language: 'yaml',
+        model,
+        automaticLayout: true,
+        minimap: { enabled: false },
+        fontSize: 14,
+        lineNumbersMinChars: 3,
+        scrollbar: {
+          useShadows: false
+        },
+        overviewRulerLanes: 0,
+        hideCursorInOverviewRuler: true
+      })
     }
+
     return () => {
-      tsonEditor.dispose()
       model.dispose()
+      tsonEditor.dispose()
     }
   }, [])
 
