@@ -20657,6 +20657,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.45.1":
+  version: 7.45.1
+  resolution: "react-hook-form@npm:7.45.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: af00c67fad33049e3ccecbbe80335f20f66f41ba3e48bc511cc7985b4c39d229c1b67520d90a824ba3415e76473d73020e429c629b658ca78b77f5c64ce21be6
+  languageName: node
+  linkType: hard
+
 "react-hot-toast@npm:2.4.1":
   version: 2.4.1
   resolution: "react-hot-toast@npm:2.4.1"
@@ -24591,6 +24600,7 @@ __metadata:
     prop-types: 15.8.1
     react: ^18.1.0
     react-dom: ^18.1.0
+    react-hook-form: ^7.45.1
     tailwindcss: ^3.3.2
     tsonify: ^0.2.2
   languageName: unknown

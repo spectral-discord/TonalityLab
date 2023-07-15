@@ -67,6 +67,7 @@ const LabLayout = ({ children }: LabLayoutProps) => {
               <li className="flex px-3" key={`Link to ${navLink.title}`}>
                 <NavLink
                   to={navLink.destination}
+                  onClick={() => setOpenNav(false)}
                   className="flex py-[2px] hover:text-purple dark:hover:text-pink"
                   activeClassName="border-b-2 pb-0 border-gray-dark dark:border-pink hover:text-black hover:dark:text-white"
                 >

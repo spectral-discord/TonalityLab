@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-import { Code, InputField } from 'iconoir-react'
+import { Code, InputField, SaveFloppyDisk } from 'iconoir-react'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { TSON } from 'tsonify'
 import type { EditTuningById, UpdateTuningInput } from 'types/graphql'
 import YAML from 'yaml'
@@ -47,9 +48,6 @@ export const Loading = () => <div>Loading...</div>
 export const Failure = ({ error }: CellFailureProps) => <div className="rw-cell-error">{error?.message}</div>
 
 export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
-  const tson = new TSON(tuning.tson)
-  const tuningString = YAML.stringify(tson.findTuningById(tuning.id))
-
   const [useEditor, setUseEditor] = useState(false)
   const [updateTuning, { loading, error }] = useMutation(UPDATE_TUNING_MUTATION, {
     onCompleted: () => {
@@ -61,31 +59,63 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
     }
   })
 
-  const onSave = (input: UpdateTuningInput, id: EditTuningById['tuning']['id']) => {
-    updateTuning({ variables: { id, input } })
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm<UpdateTuningInput>()
+
+  const tsonInput = watch('tson')
+
+  useEffect(() => {
+    const tson = new TSON(tuning.tson)
+    const tuningString = YAML.stringify(tson.findTuningById(tuning.id))
+
+    register('tson')
+    setValue('tson', tuningString)
+  }, [register, setValue, tuning])
+
+  const onSubmit: SubmitHandler<UpdateTuningInput> = (input: UpdateTuningInput) => {
+    updateTuning({ variables: { id: tuning.id, input } })
   }
 
   return (
     <div className={`rw-segment overflow-visible ${useEditor ? 'flex grow flex-col' : 'h-fit'}`}>
-      <header className="rw-segment-header">
-        <h2 className="rw-heading pr-8">Edit tuning: {tuning?.name}</h2>
-        <button
-          className="icon-button float-right -mt-6 inline-block"
-          onClick={() => setUseEditor(!useEditor)}
-          title={`Switch to ${useEditor ? 'tuning form' : 'text editor'}`}
-          aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
-        >
-          {useEditor ? <InputField className="icon" /> : <Code className="icon" />}
-        </button>
+      <header className="rw-segment-header flex w-full items-center">
+        <h2 className="rw-heading flex grow flex-wrap">
+          <span className="mr-2 truncate">{tuning?.name}</span>
+          <span className="text-sm text-pink">[ tuning ]</span>
+        </h2>
+        <div className="flex items-center">
+          <button
+            className="icon-button mr-4"
+            onClick={handleSubmit(onSubmit)}
+            title={`Save`}
+            aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
+          >
+            <SaveFloppyDisk className="icon" />
+          </button>
+          <button
+            className="icon-button"
+            onClick={() => setUseEditor(!useEditor)}
+            title={`Switch to ${useEditor ? 'tuning form' : 'text editor'}`}
+            aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
+          >
+            {useEditor ? <InputField className="icon" /> : <Code className="icon" />}
+          </button>
+        </div>
       </header>
       <div className={`${useEditor ? 'h-full' : 'p-4'}`}>
         {useEditor ? (
           <TSONEditor
-            tson={tuningString}
+            tson={tsonInput}
             schemaUrl="https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tuning.json"
+            onChange={tuning => setValue('tson', YAML.stringify({ tunings: [YAML.parse(tuning)] }))}
           />
         ) : (
-          <TuningForm tuning={tuning} onSave={onSave} error={error} loading={loading} />
+          <TuningForm tuning={tuning} error={error} loading={loading} />
         )}
       </div>
     </div>

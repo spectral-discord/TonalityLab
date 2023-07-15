@@ -6,6 +6,7 @@ import { setDiagnosticsOptions } from 'monaco-yaml'
 interface Props {
   tson: string
   schemaUrl?: string
+  onChange: (tuning: string) => void
 }
 
 self.MonacoEnvironment = {
@@ -23,16 +24,19 @@ self.MonacoEnvironment = {
 
 const TSONEditor = ({
   tson,
-  schemaUrl = 'https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tson.json'
+  schemaUrl = 'https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tson.json',
+  onChange = tuning => tuning
 }: Props) => {
   const divEl = useRef<HTMLDivElement>(null)
   let tsonEditor: editor.IStandaloneCodeEditor
   const modelUri = Uri.parse(schemaUrl)
 
+  // because mocano needs to refresh to detect window changes
   window.onresize = () => {
     tsonEditor.layout({} as editor.IDimension)
   }
 
+  // register json schema
   setDiagnosticsOptions({
     enableSchemaRequest: true,
     hover: true,
@@ -50,12 +54,17 @@ const TSONEditor = ({
   useEffect(() => {
     const model = editor.createModel(tson, 'yaml', modelUri)
 
+    model.onDidChangeContent(() => {
+      onChange(model.getValue())
+    })
+
     if (divEl.current) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       tsonEditor = editor.create(divEl.current, {
         language: 'yaml',
         model,
-        automaticLayout: true,
+        automaticLayout: true, // for detecting window size changes
+        // the rest is just paring down styling & features for simplicity
         minimap: { enabled: false },
         fontSize: 14,
         lineNumbersMinChars: 3,
