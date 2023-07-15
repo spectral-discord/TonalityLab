@@ -90,20 +90,20 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
         </h2>
         <div className="flex items-center">
           <button
-            className="icon-button mr-4"
-            onClick={handleSubmit(onSubmit)}
-            title={`Save`}
-            aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
-          >
-            <SaveFloppyDisk className="icon" />
-          </button>
-          <button
             className="icon-button"
             onClick={() => setUseEditor(!useEditor)}
             title={`Switch to ${useEditor ? 'tuning form' : 'text editor'}`}
             aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
           >
             {useEditor ? <InputField className="icon" /> : <Code className="icon" />}
+          </button>
+          <button
+            className="icon-button ml-4"
+            onClick={handleSubmit(onSubmit)}
+            title={`Save`}
+            aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
+          >
+            <SaveFloppyDisk className="icon" />
           </button>
         </div>
       </header>
