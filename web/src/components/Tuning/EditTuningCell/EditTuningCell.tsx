@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { Code, InputField, SaveFloppyDisk } from 'iconoir-react'
+import { CodeBrackets, InputField, SaveFloppyDisk } from 'iconoir-react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { TSON } from 'tsonify'
 import type { EditTuningById, UpdateTuningInput } from 'types/graphql'
@@ -95,7 +95,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
             title={`Switch to ${useEditor ? 'tuning form' : 'text editor'}`}
             aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
           >
-            {useEditor ? <InputField className="icon" /> : <Code className="icon" />}
+            {useEditor ? <InputField className="icon" /> : <CodeBrackets className="icon" />}
           </button>
           <button
             className="icon-button ml-4"
