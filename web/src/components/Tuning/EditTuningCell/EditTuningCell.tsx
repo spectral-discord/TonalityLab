@@ -6,7 +6,7 @@ import { TSON } from 'tsonify'
 import type { EditTuningById, UpdateTuningInput } from 'types/graphql'
 import YAML from 'yaml'
 
-import { navigate, routes } from '@redwoodjs/router'
+import { navigate, routes, Link } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -107,7 +107,14 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       <header className="rw-segment-header flex w-full items-center">
         <h2 className="rw-heading flex grow flex-wrap items-center">
           <span className="mr-2 truncate">{tuning?.name}</span>
-          <span className="text-sm text-pink">[ tuning ]</span>
+          <a
+            href="https://garden.spectraldiscord.com/#/page/tson%20specification/block/tunings"
+            className="text-sm text-pink hover:underline hover:decoration-2"
+            target="_blank"
+            rel="noreferrer"
+          >
+            [ tuning ]
+          </a>
         </h2>
         <div className="flex items-center">
           <button
