@@ -11,7 +11,7 @@
 }
 
 .rw-segment {
-  @apply border-black dark:border-purple w-full overflow-hidden rounded-lg border;
+  @apply border-black sm:dark:border-purple w-full overflow-hidden sm:rounded-lg sm:border;
   scrollbar-color: theme('colors.gray-light') transparent;
 }
 .rw-segment::-webkit-scrollbar {
@@ -214,7 +214,7 @@
 }
 
 .monaco-editor, .overflow-guard {
-  @apply rounded-b-lg;
+  @apply sm:rounded-b-lg;
   --vscode-scrollbar-shadow: none;
 }
 

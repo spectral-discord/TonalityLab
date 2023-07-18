@@ -31,11 +31,6 @@ const TSONEditor = ({
   let tsonEditor: editor.IStandaloneCodeEditor
   const modelUri = Uri.parse(schemaUrl)
 
-  // because mocano needs to refresh to detect window changes
-  window.onresize = () => {
-    tsonEditor.layout({} as editor.IDimension)
-  }
-
   // register json schema
   setDiagnosticsOptions({
     enableSchemaRequest: true,
@@ -76,6 +71,10 @@ const TSONEditor = ({
         overviewRulerLanes: 0,
         hideCursorInOverviewRuler: true
       })
+
+      window.onresize = () => {
+        tsonEditor.layout({} as editor.IDimension)
+      }
     }
 
     return () => {

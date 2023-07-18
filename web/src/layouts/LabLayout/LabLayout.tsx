@@ -96,7 +96,7 @@ const LabLayout = ({ children }: LabLayoutProps) => {
         </div>
       </nav>
       <SkipNavContent />
-      <main className={`flex grow px-4 py-6 md:px-6 md:py-8 ${openNav && 'hidden sm:flex'}`}>{children}</main>
+      <main className={`flex grow sm:px-4 sm:py-6 md:px-6 md:py-8 ${openNav && 'hidden sm:flex'}`}>{children}</main>
     </div>
   )
 }

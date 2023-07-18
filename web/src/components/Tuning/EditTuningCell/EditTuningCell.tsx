@@ -54,6 +54,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       toast.error(error.message)
     }
   })
+  const [tsonError, setTsonError] = useState('')
 
   const {
     register,
@@ -80,11 +81,25 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       const tson = new TSON()
       tson.load(input.tson)
     } catch (ex) {
-      console.log(ex)
+      setTsonError(ex)
       return
     }
 
+    setTsonError('')
     updateTuning({ variables: { id: tuning.id, input } })
+  }
+
+  const onChange = (tuning: string) => {
+    try {
+      const tson = new TSON()
+      tson.load(YAML.stringify({ tunings: [YAML.parse(tuning)] }))
+    } catch (ex) {
+      setTsonError(ex)
+      return
+    }
+
+    setTsonError('')
+    setValue('tson', tuning)
   }
 
   return (
@@ -118,7 +133,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
           <TSONEditor
             tson={tsonInput}
             schemaUrl="https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tuning.json"
-            onChange={tuning => setValue('tson', tuning)}
+            onChange={onChange}
           />
         ) : (
           <TuningForm tuning={tuning} error={error} loading={loading} />
