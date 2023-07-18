@@ -339,9 +339,21 @@
 }
 
 .monaco-editor .monaco-list-row.focused {
-  @apply dark:!bg-purple rounded-none;
+  @apply !bg-purple/50 rounded-none;
 }
 
 .monaco-editor .monaco-list-row {
-  @apply hover:dark:!bg-purple/75 hover:rounded-none;
+  @apply hover:!bg-purple/50 hover:rounded-none;
+}
+
+.monaco-editor .suggest-widget, .monaco-editor .suggest-details {
+  @apply dark:!shadow-none dark:!border !bg-white dark:!bg-editor-gray dark:!text-white dark:!border-purple;
+}
+
+.monaco-editor .monaco-highlighted-label .highlight {
+  @apply !text-pink;
+}
+
+.monaco-editor .monaco-highlighted-label {
+  @apply dark:text-white;
 }

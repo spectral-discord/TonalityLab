@@ -63,6 +63,8 @@ const TSONEditor = ({
       tsonEditor = editor.create(divEl.current, {
         language: 'yaml',
         model,
+        quickSuggestions: { other: true, strings: true, comments: true },
+        quickSuggestionsDelay: 5,
         automaticLayout: true, // for detecting window size changes
         // the rest is just paring down styling & features for simplicity
         minimap: { enabled: false },
