@@ -31,14 +31,10 @@ export const QUERY = gql`
 const UPDATE_TUNING_MUTATION = gql`
   mutation UpdateTuningMutation($id: String!, $input: UpdateTuningInput!) {
     updateTuning(id: $id, input: $input) {
-      id
-      authorId
       public
       name
       description
       tson
-      createdAt
-      updatedAt
     }
   }
 `
@@ -78,6 +74,16 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
   }, [register, setValue, tuning])
 
   const onSubmit: SubmitHandler<UpdateTuningInput> = (input: UpdateTuningInput) => {
+    input.tson = YAML.stringify({ tunings: [YAML.parse(input.tson)] })
+
+    try {
+      const tson = new TSON()
+      tson.load(input.tson)
+    } catch (ex) {
+      console.log(ex)
+      return
+    }
+
     updateTuning({ variables: { id: tuning.id, input } })
   }
 
@@ -112,7 +118,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
           <TSONEditor
             tson={tsonInput}
             schemaUrl="https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tuning.json"
-            onChange={tuning => setValue('tson', YAML.stringify({ tunings: [YAML.parse(tuning)] }))}
+            onChange={tuning => setValue('tson', tuning)}
           />
         ) : (
           <TuningForm tuning={tuning} error={error} loading={loading} />

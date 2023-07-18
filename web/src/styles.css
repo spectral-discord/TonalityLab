@@ -218,11 +218,6 @@
   --vscode-scrollbar-shadow: none;
 }
 
-.monaco-editor {
-  --vscode-tree-indentGuidesStroke: theme(colors.purple);
-  --vscode-tree-inactiveIndentGuidesStroke: theme(colors.gray-dark-accent);
-}
-
 .monaco-editor .mtk22 {
   @apply !text-pink;
 }
@@ -260,7 +255,7 @@
 }
 
 .monaco-editor .margin-view-overlays, .monaco-editor .monaco-editor-background, .monaco-editor .margin, .monaco-editor .overflow-guard {
-  @apply dark:bg-editor-gray;
+  @apply !bg-white dark:!bg-editor-gray;
 }
 
 .monaco-editor .line-numbers {
@@ -284,7 +279,7 @@
 }
 
 .monaco-editor .body {
-  @apply dark:!bg-editor-gray dark:text-white dark:bg-opacity-100
+  @apply !bg-white dark:!bg-editor-gray dark:text-white dark:bg-opacity-100
 }
 
 .monaco-editor .cursor {
@@ -309,4 +304,44 @@
 
 .monaco-editor .lines-content .core-guide-indent {
   @apply !shadow-purple !shadow-[1px_0_0_0_inset] opacity-60 dark:opacity-100;
+}
+
+.monaco-editor .find-widget, .monaco-editor .findOptionsWidget {
+  @apply dark:!shadow-none dark:!border dark:!border-t-0 !bg-white dark:!bg-editor-gray dark:!text-white dark:!border-purple;
+}
+
+.monaco-editor .overlayWidgets .quick-input-widget {
+  @apply rounded-t-none dark:!shadow-none dark:!border dark:!border-t-0 !bg-white dark:!bg-editor-gray dark:!text-white dark:!border-purple;
+}
+
+.dark .monaco-editor {
+  --vscode-widget-border: theme('colors.purple');
+}
+
+.monaco-editor .find-widget.no-results .matchesCount {
+  @apply !text-pink;
+}
+
+.monaco-editor .find-widget .monaco-sash {
+  @apply !bg-purple;
+}
+
+.monaco-editor .monaco-findInput .monaco-inputbox, .monaco-editor .monaco-list-rows {
+  @apply dark:!bg-gray-dark dark:text-white;
+}
+
+.monaco-editor .input {
+  @apply dark:!text-white focus:ring-0 focus:outline-none;
+}
+
+.monaco-editor .codicon::before {
+  @apply dark:!text-white;
+}
+
+.monaco-editor .monaco-list-row.focused {
+  @apply dark:!bg-purple rounded-none;
+}
+
+.monaco-editor .monaco-list-row {
+  @apply hover:dark:!bg-purple/75 hover:rounded-none;
 }
