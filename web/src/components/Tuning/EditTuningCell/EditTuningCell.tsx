@@ -112,6 +112,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
             className="text-sm text-pink hover:underline hover:decoration-2"
             target="_blank"
             rel="noreferrer"
+            title="Tuning specification"
           >
             [ tuning ]
           </a>

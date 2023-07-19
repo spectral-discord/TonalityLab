@@ -69,7 +69,8 @@ const TSONEditor = ({
           useShadows: false
         },
         overviewRulerLanes: 0,
-        hideCursorInOverviewRuler: true
+        hideCursorInOverviewRuler: true,
+        fontFamily: 'Fira Code'
       })
 
       window.onresize = () => {
