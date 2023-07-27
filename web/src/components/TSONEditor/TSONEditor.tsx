@@ -60,6 +60,7 @@ const TSONEditor = ({
         model,
         quickSuggestions: { other: true, strings: true, comments: true },
         quickSuggestionsDelay: 5,
+        tabSize: 2,
         automaticLayout: true, // for detecting window size changes
         // the rest is just paring down styling & features for simplicity
         minimap: { enabled: false },

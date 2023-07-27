@@ -6,7 +6,7 @@ import { TSON } from 'tsonify'
 import type { EditTuningById, UpdateTuningInput } from 'types/graphql'
 import YAML from 'yaml'
 
-import { navigate, routes, Link } from '@redwoodjs/router'
+import { navigate, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -66,7 +66,6 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
   } = useForm<UpdateTuningInput>()
 
   const tsonInput = watch('tson')
-  const privateInput = watch('private')
 
   useEffect(() => {
     window.addEventListener('resize', () => window.innerWidth >= 640 && openMenu && setOpenMenu(false))
@@ -77,7 +76,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
 
     register('tson')
     setValue('tson', YAML.stringify(tson.findTuningById(tuning.id)))
-  }, [register, setValue, tuning.id, tuning.private, tuning.tson])
+  }, [register, setValue, tuning.id, tuning.tson])
 
   const onSubmit: SubmitHandler<UpdateTuningInput> = (input: UpdateTuningInput) => {
     const parsedInput = YAML.parse(input.tson)
