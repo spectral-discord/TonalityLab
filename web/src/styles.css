@@ -407,6 +407,10 @@
   @apply dark:text-white;
 }
 
-.quick-input-list-separator {
+.monaco-editor .quick-input-list-separator {
   @apply !text-pink;
+}
+
+.editor-button-group {
+  @apply flex absolute flex-col items-center gap-3 right-2 top-20 p-2 mt-1 z-50 bg-white dark:bg-gray-dark border border-black dark:border-purple rounded sm:mt-0 sm:p-0 sm:border-0 sm:top-0 sm:gap-0 sm:relative sm:!flex sm:flex-row;
 }

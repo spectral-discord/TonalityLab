@@ -54,7 +54,8 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       toast.error(error.message)
     }
   })
-  const [tsonError, setTsonError] = useState('')
+  const [tsonError, setTsonError] = useState(null)
+  const [openMenu, setOpenMenu] = useState(false)
 
   const {
     register,
@@ -66,16 +67,23 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
 
   const tsonInput = watch('tson')
 
-  useEffect(() => {
-    const tson = new TSON(tuning.tson)
-    const tuningString = YAML.stringify(tson.findTuningById(tuning.id))
+  const tson = new TSON(tuning.tson)
+  const tuningString = YAML.stringify(tson.findTuningById(tuning.id))
 
+  useEffect(() => {
+    window.addEventListener('resize', () => window.innerWidth >= 640 && openMenu && setOpenMenu(false))
+  }, [openMenu])
+
+  useEffect(() => {
     register('tson')
     setValue('tson', tuningString)
-  }, [register, setValue, tuning])
+  }, [register, setValue, tuningString])
 
   const onSubmit: SubmitHandler<UpdateTuningInput> = (input: UpdateTuningInput) => {
-    input.tson = YAML.stringify({ tunings: [YAML.parse(input.tson)] })
+    const parsedInput = YAML.parse(input.tson)
+    input.name = parsedInput.name
+    input.description = parsedInput.description
+    input.tson = YAML.stringify({ tunings: [parsedInput] })
 
     try {
       const tson = new TSON()
@@ -85,7 +93,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       return
     }
 
-    setTsonError('')
+    setTsonError(null)
     updateTuning({ variables: { id: tuning.id, input } })
   }
 
@@ -93,12 +101,11 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
     try {
       const tson = new TSON()
       tson.load(YAML.stringify({ tunings: [YAML.parse(tuning)] }))
+      setTsonError(null)
     } catch (ex) {
       setTsonError(ex)
-      return
     }
 
-    setTsonError('')
     setValue('tson', tuning)
   }
 
@@ -117,17 +124,29 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
             [ tuning ]
           </a>
         </h2>
-        <div className="flex items-center">
+        <button
+          className="flex h-6 w-6 flex-col items-center justify-center sm:hidden"
+          onClick={() => setOpenMenu(!openMenu)}
+          aria-label={`${openMenu ? 'close' : 'open'} navigation menu`}
+        >
+          <div className={`hamburger-line ${openMenu && 'translate-y-1.5 rotate-45'}`} />
+          <div className={`hamburger-line ${openMenu && 'opacity-0'}`} />
+          <div className={`hamburger-line ${openMenu && '-translate-y-1.5 -rotate-45'}`} />
+        </button>
+        <div className={`${!openMenu && 'hidden'} editor-button-group`}>
           <button
             className="icon-button"
-            onClick={() => setUseEditor(!useEditor)}
+            onClick={() => {
+              setOpenMenu(false)
+              setUseEditor(!useEditor)
+            }}
             title={`Switch to ${useEditor ? 'tuning form' : 'text editor'}`}
             aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
           >
             {useEditor ? <InputField className="icon" /> : <CodeBrackets className="icon" />}
           </button>
           <button
-            className="icon-button ml-4"
+            className="icon-button sm:ml-4"
             onClick={handleSubmit(onSubmit)}
             title={`Save`}
             aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
