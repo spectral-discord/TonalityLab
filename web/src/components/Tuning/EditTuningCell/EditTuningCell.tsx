@@ -19,7 +19,7 @@ export const QUERY = gql`
     tuning: tuning(id: $id) {
       id
       authorId
-      public
+      private
       name
       description
       tson
@@ -31,7 +31,7 @@ export const QUERY = gql`
 const UPDATE_TUNING_MUTATION = gql`
   mutation UpdateTuningMutation($id: String!, $input: UpdateTuningInput!) {
     updateTuning(id: $id, input: $input) {
-      public
+      private
       name
       description
       tson
@@ -66,18 +66,18 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
   } = useForm<UpdateTuningInput>()
 
   const tsonInput = watch('tson')
-
-  const tson = new TSON(tuning.tson)
-  const tuningString = YAML.stringify(tson.findTuningById(tuning.id))
+  const privateInput = watch('private')
 
   useEffect(() => {
     window.addEventListener('resize', () => window.innerWidth >= 640 && openMenu && setOpenMenu(false))
   }, [openMenu])
 
   useEffect(() => {
+    const tson = new TSON(tuning.tson)
+
     register('tson')
-    setValue('tson', tuningString)
-  }, [register, setValue, tuningString])
+    setValue('tson', YAML.stringify(tson.findTuningById(tuning.id)))
+  }, [register, setValue, tuning.id, tuning.private, tuning.tson])
 
   const onSubmit: SubmitHandler<UpdateTuningInput> = (input: UpdateTuningInput) => {
     const parsedInput = YAML.parse(input.tson)
@@ -112,7 +112,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
   return (
     <div className={`rw-segment overflow-visible ${useEditor ? 'flex grow flex-col' : 'h-fit'}`}>
       <header className="rw-segment-header flex w-full items-center">
-        <h2 className="rw-heading flex grow flex-wrap items-center">
+        <h2 className="rw-heading flex grow flex-wrap sm:grow-0">
           <span className="mr-2 truncate">{tuning?.name}</span>
           <a
             href="https://garden.spectraldiscord.com/#/page/tson%20specification/block/tunings"
@@ -124,10 +124,25 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
             [ tuning ]
           </a>
         </h2>
+        <div className="ml-6 hidden grow items-center sm:flex">
+          <input
+            name="private"
+            className="relative -top-px h-4 w-4 appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-black outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-none before:opacity-0 before:content-[''] checked:border-black checked:bg-none checked:before:opacity-[0.16] checked:after:absolute checked:after:-mt-1 checked:after:ml-1 checked:after:block checked:after:h-4 checked:after:w-2 checked:after:rotate-45 checked:after:border-4 checked:after:border-l-0 checked:after:border-t-0 checked:after:border-solid checked:after:border-pink checked:after:bg-none checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:content-[''] checked:focus:before:scale-100 checked:focus:after:-mt-1 checked:focus:after:ml-1 checked:focus:after:h-4 checked:focus:after:w-2 checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-4 checked:focus:after:border-l-0 checked:focus:after:border-t-0 checked:focus:after:border-solid checked:focus:after:border-pink checked:focus:after:bg-none dark:border-white dark:checked:border-white dark:checked:bg-none"
+            type="checkbox"
+            title="Make tuning private"
+            defaultChecked={tuning.private}
+            id="privateCheckbox"
+            {...register('private')}
+          />
+          <label className="ml-2 text-sm font-semibold hover:cursor-pointer" htmlFor="privateCheckbox">
+            Private
+          </label>
+        </div>
         <button
           className="flex h-6 w-6 flex-col items-center justify-center sm:hidden"
           onClick={() => setOpenMenu(!openMenu)}
-          aria-label={`${openMenu ? 'close' : 'open'} navigation menu`}
+          title={`${openMenu ? 'Close' : 'Open'} editor menu`}
+          aria-label={`${openMenu ? 'close' : 'open'} editor menu`}
         >
           <div className={`hamburger-line ${openMenu && 'translate-y-1.5 rotate-45'}`} />
           <div className={`hamburger-line ${openMenu && 'opacity-0'}`} />

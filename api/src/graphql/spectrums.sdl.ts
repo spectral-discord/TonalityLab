@@ -3,7 +3,7 @@ export const schema = gql`
     id: String!
     author: User!
     authorId: Int!
-    public: Boolean!
+    private: Boolean!
     name: String
     description: String
     tson: String!
@@ -20,14 +20,14 @@ export const schema = gql`
 
   input CreateSpectrumInput {
     authorId: Int!
-    public: Boolean!
+    private: Boolean!
     name: String
     description: String
     tson: String!
   }
 
   input UpdateSpectrumInput {
-    public: Boolean
+    private: Boolean
     name: String
     description: String
     tson: String

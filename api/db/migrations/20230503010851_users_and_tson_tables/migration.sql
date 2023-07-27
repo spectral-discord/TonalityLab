@@ -11,7 +11,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Tuning" (
     "id" VARCHAR(10) NOT NULL DEFAULT nanoid(10),
     "authorId" INTEGER NOT NULL,
-    "public" BOOLEAN NOT NULL DEFAULT false,
+    "private" BOOLEAN NOT NULL DEFAULT false,
     "name" TEXT,
     "description" TEXT,
     "tson" TEXT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE "Tuning" (
 CREATE TABLE "Spectrum" (
     "id" VARCHAR(10) NOT NULL DEFAULT nanoid(10),
     "authorId" INTEGER NOT NULL,
-    "public" BOOLEAN NOT NULL DEFAULT false,
+    "private" BOOLEAN NOT NULL DEFAULT false,
     "name" TEXT,
     "description" TEXT,
     "tson" TEXT NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE "Spectrum" (
 CREATE TABLE "Set" (
     "id" VARCHAR(10) NOT NULL DEFAULT nanoid(10),
     "authorId" INTEGER NOT NULL,
-    "public" BOOLEAN NOT NULL DEFAULT false,
+    "private" BOOLEAN NOT NULL DEFAULT false,
     "name" TEXT,
     "description" TEXT,
     "tson" TEXT NOT NULL,

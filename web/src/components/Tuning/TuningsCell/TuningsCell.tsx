@@ -10,7 +10,7 @@ export const QUERY = gql`
     tunings {
       id
       authorId
-      public
+      private
       name
       description
       tson
