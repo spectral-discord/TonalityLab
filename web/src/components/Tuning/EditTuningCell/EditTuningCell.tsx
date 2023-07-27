@@ -111,11 +111,11 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
   return (
     <div className={`rw-segment overflow-visible ${useEditor ? 'flex grow flex-col' : 'h-fit'}`}>
       <header className="rw-segment-header flex w-full items-center">
-        <h2 className="rw-heading flex grow flex-wrap sm:grow-0">
+        <h2 className="rw-heading flex grow flex-wrap items-center sm:grow-0">
           <span className="mr-2 truncate">{tuning?.name}</span>
           <a
             href="https://garden.spectraldiscord.com/#/page/tson%20specification/block/tunings"
-            className="text-sm text-pink hover:underline hover:decoration-2"
+            className="relative bottom-px text-sm text-pink hover:underline hover:decoration-2"
             target="_blank"
             rel="noreferrer"
             title="Tuning specification"
@@ -123,10 +123,10 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
             [ tuning ]
           </a>
         </h2>
-        <div className="ml-6 hidden grow items-center sm:flex">
+        <div className="ml-8 hidden grow items-center sm:flex">
           <input
             name="private"
-            className="relative -top-px h-4 w-4 appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-black outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-none before:opacity-0 before:content-[''] checked:border-black checked:bg-none checked:before:opacity-[0.16] checked:after:absolute checked:after:-mt-1 checked:after:ml-1 checked:after:block checked:after:h-4 checked:after:w-2 checked:after:rotate-45 checked:after:border-4 checked:after:border-l-0 checked:after:border-t-0 checked:after:border-solid checked:after:border-pink checked:after:bg-none checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:content-[''] checked:focus:before:scale-100 checked:focus:after:-mt-1 checked:focus:after:ml-1 checked:focus:after:h-4 checked:focus:after:w-2 checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-4 checked:focus:after:border-l-0 checked:focus:after:border-t-0 checked:focus:after:border-solid checked:focus:after:border-pink checked:focus:after:bg-none dark:border-white dark:checked:border-white dark:checked:bg-none"
+            className="checkbox"
             type="checkbox"
             title="Make tuning private"
             defaultChecked={tuning.private}

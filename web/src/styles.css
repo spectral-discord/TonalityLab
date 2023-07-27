@@ -163,7 +163,6 @@
 .rw-check-radio-item-none {
   @apply text-gray-dark;
 }
-.rw-input[type='checkbox'],
 .rw-input[type='radio'] {
   @apply ml-0 mr-1 mt-1 inline w-4;
 }
@@ -413,4 +412,8 @@
 
 .editor-button-group {
   @apply flex absolute flex-col items-center gap-3 right-2 top-20 p-2 mt-1 z-50 bg-white dark:bg-gray-dark border border-black dark:border-purple rounded sm:mt-0 sm:p-0 sm:border-0 sm:top-0 sm:gap-0 sm:relative sm:!flex sm:flex-row;
+}
+
+.checkbox {
+  @apply relative -top-px h-4 w-4 appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-black outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-none before:opacity-0 before:content-[''] checked:border-black checked:bg-none checked:before:opacity-[0.16] checked:after:absolute checked:after:-mt-1 checked:after:ml-1 checked:after:block checked:after:h-4 checked:after:w-2 checked:after:rotate-45 checked:after:border-4 checked:after:border-l-0 checked:after:border-t-0 checked:after:border-solid checked:after:border-pink checked:after:bg-none checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:content-[''] checked:focus:before:scale-100 checked:focus:after:-mt-1 checked:focus:after:ml-1 checked:focus:after:h-4 checked:focus:after:w-2 checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-4 checked:focus:after:border-l-0 checked:focus:after:border-t-0 checked:focus:after:border-solid checked:focus:after:border-pink checked:focus:after:bg-none dark:border-white dark:checked:border-white dark:checked:bg-none;
 }
