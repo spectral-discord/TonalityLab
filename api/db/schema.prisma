@@ -29,7 +29,7 @@ model Tuning {
   id              String      @id @default(dbgenerated("nanoid(10)")) @db.VarChar(10)
   author          User        @relation(fields: [authorId], references: [id])
   authorId        Int
-  publprivateic          Boolean     @default(false)
+  private          Boolean     @default(false)
 
   // TSON data
   name            String?
