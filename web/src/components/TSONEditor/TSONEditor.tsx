@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 
-import { editor, Uri } from 'monaco-editor'
+import { editor, Uri, MarkerSeverity } from 'monaco-editor'
 import { setDiagnosticsOptions } from 'monaco-yaml'
 
 interface Props {
@@ -49,8 +49,17 @@ const TSONEditor = ({
   })
 
   useEffect(() => {
-    console.log(tsonError)
-  }, [tsonError])
+    editor.setModelMarkers(editor.getModel(modelUri), '', [
+      {
+        startLineNumber: 0,
+        startColumn: 18,
+        endLineNumber: 8,
+        endColumn: 24,
+        message: tsonError,
+        severity: MarkerSeverity.Warning
+      }
+    ])
+  }, [tsonError, modelUri])
 
   useEffect(() => {
     const model = editor.createModel(tson, 'yaml', modelUri)
