@@ -5,6 +5,7 @@ import { setDiagnosticsOptions } from 'monaco-yaml'
 
 interface Props {
   tson: string
+  tsonError?: string
   schemaUrl?: string
   onChange: (tuning: string) => void
 }
@@ -24,6 +25,7 @@ self.MonacoEnvironment = {
 
 const TSONEditor = ({
   tson,
+  tsonError,
   schemaUrl = 'https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tson.json',
   onChange = tuning => tuning
 }: Props) => {
@@ -45,6 +47,10 @@ const TSONEditor = ({
       }
     ]
   })
+
+  useEffect(() => {
+    console.log(tsonError)
+  }, [tsonError])
 
   useEffect(() => {
     const model = editor.createModel(tson, 'yaml', modelUri)

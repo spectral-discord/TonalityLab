@@ -106,7 +106,9 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       tson.load(YAML.stringify({ tunings: [parsedInput] }))
       setTsonError(null)
     } catch (ex) {
-      setTsonError(ex)
+      const error = ex.message.includes('Invalid TSON!') ? 
+      ex.message.split('\n')[1].slice(1) : ex.message
+      setTsonError(error)
     }
 
     setValue('tson', YAML.stringify(parsedInput))
@@ -177,6 +179,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
         {useEditor ? (
           <TSONEditor
             tson={tsonInput}
+            tsonError={tsonError}
             schemaUrl="https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tuning.json"
             onChange={onChange}
           />
