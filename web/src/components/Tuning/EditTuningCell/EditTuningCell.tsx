@@ -80,6 +80,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
 
   const onSubmit: SubmitHandler<UpdateTuningInput> = (input: UpdateTuningInput) => {
     const parsedInput = YAML.parse(input.tson)
+    parsedInput.id = tuning.id
     input.name = parsedInput.name
     input.description = parsedInput.description
     input.tson = YAML.stringify({ tunings: [parsedInput] })
@@ -96,16 +97,19 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
     updateTuning({ variables: { id: tuning.id, input } })
   }
 
-  const onChange = (tuning: string) => {
+  const onChange = (input: string) => {
+    const parsedInput = YAML.parse(input)
+    parsedInput.id = tuning.id
+
     try {
       const tson = new TSON()
-      tson.load(YAML.stringify({ tunings: [YAML.parse(tuning)] }))
+      tson.load(YAML.stringify({ tunings: [parsedInput] }))
       setTsonError(null)
     } catch (ex) {
       setTsonError(ex)
     }
 
-    setValue('tson', tuning)
+    setValue('tson', YAML.stringify(parsedInput))
   }
 
   return (
