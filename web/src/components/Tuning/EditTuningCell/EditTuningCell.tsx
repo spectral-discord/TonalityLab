@@ -105,12 +105,12 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
         input.split('\n').forEach((line, lineIndex) => {
           const regex = RegExp(`^(- )?(([a-z]| )+: )?( +)?(${escapedExpr})|("${escapedExpr}")|('${escapedExpr}')$`)
           if (line.trim().match(regex)) {
-            const index = line.indexOf(badExpression)
+            const index = line.indexOf(badExpression) + 1
             markers.push({
               startLineNumber: lineIndex + 1,
-              startColumn: index + 1,
+              startColumn: index,
               endLineNumber: lineIndex + 1,
-              endColumn: index + badExpression.length + 1,
+              endColumn: index + badExpression.length,
               message: error
             })
           }
