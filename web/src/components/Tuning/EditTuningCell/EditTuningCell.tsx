@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { CodeBrackets, InputField, SaveFloppyDisk } from 'iconoir-react'
+import { /* CodeBrackets, InputField, */ EyeClose, EyeEmpty, SaveFloppyDisk } from 'iconoir-react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { TSON } from 'tsonify'
 import type { EditTuningById, UpdateTuningInput } from 'types/graphql'
@@ -44,7 +44,7 @@ export const Loading = () => <div>Loading...</div>
 export const Failure = ({ error }: CellFailureProps) => <div className="rw-cell-error">{error?.message}</div>
 
 export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
-  const [useEditor, setUseEditor] = useState(false)
+  const [useEditor, setUseEditor] = useState(true)
   const [updateTuning, { loading, error }] = useMutation(UPDATE_TUNING_MUTATION, {
     onCompleted: () => {
       toast.success('Tuning updated')
@@ -66,16 +66,15 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
   } = useForm<UpdateTuningInput>()
 
   const tsonInput = watch('tson')
+  const isPrivate = watch('private')
 
   useEffect(() => {
     window.addEventListener('resize', () => window.innerWidth >= 640 && openMenu && setOpenMenu(false))
   }, [openMenu])
 
   useEffect(() => {
-    const tson = new TSON(tuning.tson)
-
     register('tson')
-    setValue('tson', YAML.stringify(tson.findTuningById(tuning.id)))
+    setValue('tson', YAML.stringify(new TSON(tuning.tson).findTuningById(tuning.id)))
   }, [register, setValue, tuning.id, tuning.tson])
 
   const onSubmit: SubmitHandler<UpdateTuningInput> = (input: UpdateTuningInput) => {
@@ -106,12 +105,11 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       tson.load(YAML.stringify({ tunings: [parsedInput] }))
       setTsonError(null)
     } catch (ex) {
-      const error = ex.message.includes('Invalid TSON!') ? 
-      ex.message.split('\n')[1].slice(1) : ex.message
+      const error = ex.message.includes('Invalid TSON!') ? ex.message.split('\n')[1].slice(1) : ex.message
       setTsonError(error)
     }
 
-    setValue('tson', YAML.stringify(parsedInput))
+    setValue('tson', input)
   }
 
   return (
@@ -154,7 +152,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
           <div className={`hamburger-line ${openMenu && '-translate-y-1.5 -rotate-45'}`} />
         </button>
         <div className={`${!openMenu && 'hidden'} editor-button-group`}>
-          <button
+          {/* <button
             className="icon-button"
             onClick={() => {
               setOpenMenu(false)
@@ -164,14 +162,23 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
             aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
           >
             {useEditor ? <InputField className="icon" /> : <CodeBrackets className="icon" />}
-          </button>
+          </button> */}
           <button
             className="icon-button sm:ml-4"
             onClick={handleSubmit(onSubmit)}
-            title={`Save`}
-            aria-label={`use ${useEditor ? 'input forms' : 'text editor'}`}
+            title={'Save'}
+            aria-label={'Save'}
+            disabled={tsonError}
           >
             <SaveFloppyDisk className="icon" />
+          </button>
+          <button
+            className="icon-button sm:ml-4 sm:hidden"
+            onClick={() => setValue('private', !isPrivate)}
+            title={`Make ${isPrivate ? 'public' : 'private'}`}
+            aria-label={`Make ${isPrivate ? 'public' : 'private'}`}
+          >
+            {isPrivate ? <EyeClose className="icon" /> : <EyeEmpty className="icon" />}
           </button>
         </div>
       </header>

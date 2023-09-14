@@ -62,6 +62,13 @@ const TSONEditor = ({
   }, [tsonError, modelUri])
 
   useEffect(() => {
+    const model = editor.getModel(modelUri);
+    if (model && model.getValue() !== tson) {
+      editor.getModel(modelUri)?.setValue(tson)
+    }
+  }, [tson, modelUri])
+
+  useEffect(() => {
     const model = editor.createModel(tson, 'yaml', modelUri)
 
     model.onDidChangeContent(() => {
