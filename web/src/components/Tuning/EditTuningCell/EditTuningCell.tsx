@@ -54,16 +54,10 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       toast.error(error.message)
     }
   })
-  const [tsonError, setTsonError] = useState(null)
+  const [tsonErrors, setTsonErrors] = useState([])
   const [openMenu, setOpenMenu] = useState(false)
 
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    watch,
-    formState: { errors }
-  } = useForm<UpdateTuningInput>()
+  const { register, setValue, handleSubmit, watch } = useForm<UpdateTuningInput>()
 
   const tsonInput = watch('tson')
   const isPrivate = watch('private')
@@ -83,16 +77,6 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
     input.name = parsedInput.name
     input.description = parsedInput.description
     input.tson = YAML.stringify({ tunings: [parsedInput] })
-
-    try {
-      const tson = new TSON()
-      tson.load(input.tson)
-    } catch (ex) {
-      setTsonError(ex)
-      return
-    }
-
-    setTsonError(null)
     updateTuning({ variables: { id: tuning.id, input } })
   }
 
@@ -103,10 +87,34 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
     try {
       const tson = new TSON()
       tson.load(YAML.stringify({ tunings: [parsedInput] }))
-      setTsonError(null)
+      setTsonErrors([])
     } catch (ex) {
       const error = ex.message.includes('Invalid TSON!') ? ex.message.split('\n')[1].slice(1) : ex.message
-      setTsonError(error)
+      const markers = []
+
+      if (
+        error.includes('Expression invalid, unable to parse') ||
+        error.includes('Expression must evaluate to a positive number')
+      ) {
+        const badExpression = error.split(': "')[1].slice(0, -1)
+        const escapedExpr = badExpression.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
+
+        input.split('\n').forEach((line, lineIndex) => {
+          const regex = RegExp(`^(- )?(([a-z]| )+: )?(${escapedExpr})|("${escapedExpr}")|('${escapedExpr}')$`)
+          if (line.trim().match(regex)) {
+            const index = line.indexOf(badExpression)
+            markers.push({
+              startLineNumber: lineIndex + 1,
+              startColumn: index + 1,
+              endLineNumber: lineIndex + 1,
+              endColumn: index + badExpression.length + 1,
+              message: error
+            })
+          }
+        })
+      }
+
+      setTsonErrors(markers)
     }
 
     setValue('tson', input)
@@ -168,7 +176,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
             onClick={handleSubmit(onSubmit)}
             title={'Save'}
             aria-label={'Save'}
-            disabled={tsonError}
+            disabled={tsonErrors.length > 0}
           >
             <SaveFloppyDisk className="icon" />
           </button>
@@ -186,7 +194,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
         {useEditor ? (
           <TSONEditor
             tson={tsonInput}
-            tsonError={tsonError}
+            tsonErrors={tsonErrors}
             schemaUrl="https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tuning.json"
             onChange={onChange}
           />

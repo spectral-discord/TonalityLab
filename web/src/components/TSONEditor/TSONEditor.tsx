@@ -3,9 +3,17 @@ import React, { useRef, useEffect } from 'react'
 import { editor, Uri, MarkerSeverity } from 'monaco-editor'
 import { setDiagnosticsOptions } from 'monaco-yaml'
 
+interface ErrorData {
+  startLineNumber: number
+  startColumn: number
+  endLineNumber: number
+  endColumn: number
+  message: string
+}
+
 interface Props {
   tson: string
-  tsonError?: string
+  tsonErrors: ErrorData[]
   schemaUrl?: string
   onChange: (tuning: string) => void
 }
@@ -25,7 +33,7 @@ self.MonacoEnvironment = {
 
 const TSONEditor = ({
   tson,
-  tsonError,
+  tsonErrors,
   schemaUrl = 'https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tson.json',
   onChange = tuning => tuning
 }: Props) => {
@@ -49,17 +57,9 @@ const TSONEditor = ({
   })
 
   useEffect(() => {
-    editor.setModelMarkers(editor.getModel(modelUri), '', [
-      {
-        startLineNumber: 0,
-        startColumn: 18,
-        endLineNumber: 8,
-        endColumn: 24,
-        message: tsonError,
-        severity: MarkerSeverity.Warning
-      }
-    ])
-  }, [tsonError, modelUri])
+    const markers = tsonErrors.map(err => ({ ...err, severity: MarkerSeverity.Warning }))
+    editor.setModelMarkers(editor.getModel(modelUri), '', markers)
+  }, [tsonErrors, modelUri])
 
   useEffect(() => {
     const model = editor.getModel(modelUri);
