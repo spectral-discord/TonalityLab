@@ -55,6 +55,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
     }
   })
   const [tsonErrors, setTsonErrors] = useState([])
+  const [tsonInvalid, setTsonInvalid] = useState(false)
   const [openMenu, setOpenMenu] = useState(false)
 
   const { register, setValue, handleSubmit, watch } = useForm<UpdateTuningInput>()
@@ -88,9 +89,11 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       const tson = new TSON()
       tson.load(YAML.stringify({ tunings: [parsedInput] }))
       setTsonErrors([])
+      setTsonInvalid(false)
     } catch (ex) {
       const error = ex.message.includes('Invalid TSON!') ? ex.message.split('\n')[1].slice(1) : ex.message
       const markers = []
+      setTsonInvalid(true)
 
       if (
         error.includes('Expression invalid, unable to parse') ||
@@ -100,7 +103,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
         const escapedExpr = badExpression.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
 
         input.split('\n').forEach((line, lineIndex) => {
-          const regex = RegExp(`^(- )?(([a-z]| )+: )?(${escapedExpr})|("${escapedExpr}")|('${escapedExpr}')$`)
+          const regex = RegExp(`^(- )?(([a-z]| )+: )?( +)?(${escapedExpr})|("${escapedExpr}")|('${escapedExpr}')$`)
           if (line.trim().match(regex)) {
             const index = line.indexOf(badExpression)
             markers.push({
@@ -176,7 +179,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
             onClick={handleSubmit(onSubmit)}
             title={'Save'}
             aria-label={'Save'}
-            disabled={tsonErrors.length > 0}
+            disabled={tsonInvalid}
           >
             <SaveFloppyDisk className="icon" />
           </button>
