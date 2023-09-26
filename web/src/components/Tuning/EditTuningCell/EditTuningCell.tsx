@@ -140,14 +140,10 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
           })
         })
 
-        console.log(YAML.stringify(notes))
-
         const regexStr = YAML.stringify(notes)
           .split('\n')
           .map(line => `(${line.trim().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')})`)
           .join('(\n)( +)?')
-
-        console.log(input.split(RegExp(regexStr))[0])
 
         const startLineNumber = input.split(RegExp(regexStr))[0].split('\n').length
         const startColumn = input.split('\n')[startLineNumber].split('-')[0].length + 1
