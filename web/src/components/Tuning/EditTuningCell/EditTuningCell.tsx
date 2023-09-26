@@ -85,9 +85,11 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
     const parsedInput = YAML.parse(input)
     parsedInput.id = tuning.id
 
+    const fullTson = { tunings: [parsedInput] }
+
     try {
       const tson = new TSON()
-      tson.load(YAML.stringify({ tunings: [parsedInput] }))
+      tson.load(YAML.stringify(fullTson))
       setTsonErrors([])
       setTsonInvalid(false)
     } catch (ex) {
@@ -99,7 +101,10 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
         error.includes('Expression invalid, unable to parse') ||
         error.includes('Expression must evaluate to a positive number')
       ) {
-        const badExpression = error.split(': "')[1].slice(0, -1)
+        const badExpression = error.includes('Expression invalid, unable to parse')
+          ? error.slice(38, -1)
+          : error.slice(48, -1)
+
         const escapedExpr = badExpression.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
 
         input.split('\n').forEach((line, lineIndex) => {
@@ -115,6 +120,40 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
             })
           }
         })
+      } else if (error.includes('The notes array contains frequency ratios that evaluate to the same value')) {
+        const [expression1, expression2] = error.slice(76, -1).split('", "')
+
+        let notes
+        fullTson.tunings.forEach(tuning => {
+          tuning.scales.forEach(scale => {
+            const reducedNotes = scale.notes.map(note => {
+              if (typeof note === 'object') {
+                return String(note.ratio ?? note['frequency ratio'])
+              }
+
+              return String(note)
+            })
+
+            if (reducedNotes.includes(expression1) && reducedNotes.includes(expression2)) {
+              notes = scale.notes
+            }
+          })
+        })
+
+        console.log(YAML.stringify(notes))
+
+        const regexStr = YAML.stringify(notes)
+          .split('\n')
+          .map(line => `(${line.trim().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')})`)
+          .join('(\n)( +)?')
+
+        console.log(input.split(RegExp(regexStr))[0])
+
+        const startLineNumber = input.split(RegExp(regexStr))[0].split('\n').length
+        const startColumn = input.split('\n')[startLineNumber].split('-')[0].length + 1
+        const endLineNumber = startLineNumber + notes.length - 1
+        const endColumn = input.split('\n')[endLineNumber - 1].length + 1
+        markers.push({ startLineNumber, startColumn, endLineNumber, endColumn, message: error })
       }
 
       setTsonErrors(markers)
