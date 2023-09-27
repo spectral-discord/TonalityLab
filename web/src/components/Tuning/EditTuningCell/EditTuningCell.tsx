@@ -54,7 +54,6 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       toast.error(error.message)
     }
   })
-  const [tsonErrors, setTsonErrors] = useState([])
   const [tsonInvalid, setTsonInvalid] = useState(false)
   const [openMenu, setOpenMenu] = useState(false)
 
@@ -81,80 +80,8 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
     updateTuning({ variables: { id: tuning.id, input } })
   }
 
-  const onChange = (input: string) => {
-    const parsedInput = YAML.parse(input)
-    parsedInput.id = tuning.id
-
-    const fullTson = { tunings: [parsedInput] }
-
-    try {
-      const tson = new TSON()
-      tson.load(YAML.stringify(fullTson))
-      setTsonErrors([])
-      setTsonInvalid(false)
-    } catch (ex) {
-      const error = ex.message.includes('Invalid TSON!') ? ex.message.split('\n')[1].slice(1) : ex.message
-      const markers = []
-      setTsonInvalid(true)
-
-      if (
-        error.includes('Expression invalid, unable to parse') ||
-        error.includes('Expression must evaluate to a positive number')
-      ) {
-        const badExpression = error.includes('Expression invalid, unable to parse')
-          ? error.slice(38, -1)
-          : error.slice(48, -1)
-
-        const escapedExpr = badExpression.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
-
-        input.split('\n').forEach((line, lineIndex) => {
-          const regex = RegExp(`^(- )?(([a-z]| )+: )?( +)?(${escapedExpr})|("${escapedExpr}")|('${escapedExpr}')$`)
-          if (line.trim().match(regex)) {
-            const index = line.indexOf(badExpression) + 1
-            markers.push({
-              startLineNumber: lineIndex + 1,
-              startColumn: index,
-              endLineNumber: lineIndex + 1,
-              endColumn: index + badExpression.length,
-              message: error
-            })
-          }
-        })
-      } else if (error.includes('The notes array contains frequency ratios that evaluate to the same value')) {
-        const [expression1, expression2] = error.slice(76, -1).split('", "')
-
-        let notes
-        fullTson.tunings.forEach(tuning => {
-          tuning.scales.forEach(scale => {
-            const reducedNotes = scale.notes.map(note => {
-              if (typeof note === 'object') {
-                return String(note.ratio ?? note['frequency ratio'])
-              }
-
-              return String(note)
-            })
-
-            if (reducedNotes.includes(expression1) && reducedNotes.includes(expression2)) {
-              notes = scale.notes
-            }
-          })
-        })
-
-        const regexStr = YAML.stringify(notes)
-          .split('\n')
-          .map(line => `(${line.trim().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')})`)
-          .join('(\n)( +)?')
-
-        const startLineNumber = input.split(RegExp(regexStr))[0].split('\n').length
-        const startColumn = input.split('\n')[startLineNumber].split('-')[0].length + 1
-        const endLineNumber = startLineNumber + notes.length - 1
-        const endColumn = input.split('\n')[endLineNumber - 1].length + 1
-        markers.push({ startLineNumber, startColumn, endLineNumber, endColumn, message: error })
-      }
-
-      setTsonErrors(markers)
-    }
-
+  const onChange = (input: string, containsErrors: boolean) => {
+    setTsonInvalid(containsErrors)
     setValue('tson', input)
   }
 
@@ -230,12 +157,7 @@ export const Success = ({ tuning }: CellSuccessProps<EditTuningById>) => {
       </header>
       <div className={`${useEditor ? 'h-full' : 'p-4'}`}>
         {useEditor ? (
-          <TSONEditor
-            tson={tsonInput}
-            tsonErrors={tsonErrors}
-            schemaUrl="https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tuning.json"
-            onChange={onChange}
-          />
+          <TSONEditor tson={tsonInput} schema="tuning" onChange={onChange} />
         ) : (
           <TuningForm tuning={tuning} error={error} loading={loading} />
         )}

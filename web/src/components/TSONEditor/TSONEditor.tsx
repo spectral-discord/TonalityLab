@@ -2,20 +2,13 @@ import React, { useRef, useEffect } from 'react'
 
 import { editor, Uri, MarkerSeverity } from 'monaco-editor'
 import { setDiagnosticsOptions } from 'monaco-yaml'
-
-interface ErrorData {
-  startLineNumber: number
-  startColumn: number
-  endLineNumber: number
-  endColumn: number
-  message: string
-}
+import { TSON } from 'tsonify'
+import YAML from 'yaml'
 
 interface Props {
   tson: string
-  tsonErrors: ErrorData[]
-  schemaUrl?: string
-  onChange: (tuning: string) => void
+  schema?: string
+  onChange: (tuning: string, containsErrors: boolean) => void
 }
 
 self.MonacoEnvironment = {
@@ -31,14 +24,19 @@ self.MonacoEnvironment = {
   }
 }
 
-const TSONEditor = ({
-  tson,
-  tsonErrors,
-  schemaUrl = 'https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tson.json',
-  onChange = tuning => tuning
-}: Props) => {
+const TSONEditor = ({ tson, schema = 'tson', onChange = () => {} }: Props) => {
   const divEl = useRef<HTMLDivElement>(null)
   let tsonEditor: editor.IStandaloneCodeEditor
+  let schemaUrl = 'https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tson.json'
+
+  if (schema === 'tuning') {
+    schemaUrl = 'https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/tuning.json'
+  } else if (schema === 'spectrum') {
+    schemaUrl = 'https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/spectrum.json'
+  } else if (schema === 'set') {
+    schemaUrl = 'https://raw.githubusercontent.com/spectral-discord/TSON/main/schema/set.json'
+  }
+
   const modelUri = Uri.parse(schemaUrl)
 
   // register json schema
@@ -57,12 +55,7 @@ const TSONEditor = ({
   })
 
   useEffect(() => {
-    const markers = tsonErrors.map(err => ({ ...err, severity: MarkerSeverity.Warning }))
-    editor.setModelMarkers(editor.getModel(modelUri), '', markers)
-  }, [tsonErrors, modelUri])
-
-  useEffect(() => {
-    const model = editor.getModel(modelUri);
+    const model = editor.getModel(modelUri)
     if (model && model.getValue() !== tson) {
       editor.getModel(modelUri)?.setValue(tson)
     }
@@ -72,7 +65,7 @@ const TSONEditor = ({
     const model = editor.createModel(tson, 'yaml', modelUri)
 
     model.onDidChangeContent(() => {
-      onChange(model.getValue())
+      onInputChange(model.getValue())
     })
 
     if (divEl.current) {
@@ -107,6 +100,91 @@ const TSONEditor = ({
       tsonEditor.dispose()
     }
   }, [])
+
+  const onInputChange = (input: string) => {
+    let parsedInput = YAML.parse(input)
+    let containsErrors = false
+    const markers = []
+
+    if (schema === 'tuning') {
+      parsedInput = { tunings: [parsedInput] }
+    } else if (schema === 'spectrum') {
+      parsedInput = { spectra: [parsedInput] }
+    } else if (schema === 'set') {
+      parsedInput = { sets: [parsedInput] }
+    }
+
+    try {
+      const tson = new TSON()
+      tson.load(YAML.stringify(parsedInput))
+    } catch (ex) {
+      containsErrors = true
+      const error = ex.message.includes('Invalid TSON!') ? ex.message.split('\n')[1].slice(1) : ex.message
+
+      if (
+        error.includes('Expression invalid, unable to parse') ||
+        error.includes('Expression must evaluate to a positive number')
+      ) {
+        const badExpression = error.includes('Expression invalid, unable to parse')
+          ? error.slice(38, -1)
+          : error.slice(48, -1)
+
+        const escapedExpr = badExpression.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
+
+        input.split('\n').forEach((line, lineIndex) => {
+          const regex = RegExp(`^(- )?(([a-z]| )+: )?( +)?(${escapedExpr})|("${escapedExpr}")|('${escapedExpr}')$`)
+          if (line.trim().match(regex)) {
+            const index = line.indexOf(badExpression) + 1
+            markers.push({
+              startLineNumber: lineIndex + 1,
+              startColumn: index,
+              endLineNumber: lineIndex + 1,
+              endColumn: index + badExpression.length,
+              message: error
+            })
+          }
+        })
+      } else if (error.includes('The notes array contains frequency ratios that evaluate to the same value')) {
+        const [expression1, expression2] = error.slice(76, -1).split('", "')
+
+        let notes
+        parsedInput.tunings.forEach(tuning => {
+          tuning.scales.forEach(scale => {
+            const reducedNotes = scale.notes.map(note => {
+              if (typeof note === 'object') {
+                return String(note.ratio ?? note['frequency ratio'])
+              }
+
+              return String(note)
+            })
+
+            if (reducedNotes.includes(expression1) && reducedNotes.includes(expression2)) {
+              notes = scale.notes
+            }
+          })
+        })
+
+        const regexStr = YAML.stringify(notes)
+          .split('\n')
+          .map(line => `(${line.trim().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')})`)
+          .join('(\n)( +)?')
+
+        const startLineNumber = input.split(RegExp(regexStr))[0].split('\n').length
+        const startColumn = input.split('\n')[startLineNumber].split('-')[0].length + 1
+        const endLineNumber = startLineNumber + notes.length - 1
+        const endColumn = input.split('\n')[endLineNumber - 1].length + 1
+        markers.push({ startLineNumber, startColumn, endLineNumber, endColumn, message: error })
+      }
+    }
+
+    onChange(input, containsErrors)
+
+    editor.setModelMarkers(
+      editor.getModel(modelUri),
+      '',
+      markers.map(err => ({ ...err, severity: MarkerSeverity.Warning }))
+    )
+  }
 
   return <div className="Editor h-full" ref={divEl}></div>
 }
