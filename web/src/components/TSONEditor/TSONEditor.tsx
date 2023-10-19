@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 
-import { editor, Uri, MarkerSeverity } from 'monaco-editor'
+import { evaluate } from 'mathjs'
+import { editor, Uri, MarkerSeverity, Range } from 'monaco-editor'
 import { setDiagnosticsOptions } from 'monaco-yaml'
 import { TSON } from 'tsonify'
 import YAML from 'yaml'
@@ -101,11 +102,153 @@ const TSONEditor = ({ tson, schema = 'tson', onChange = () => {} }: Props) => {
     }
   }, [])
 
+  /**
+   * Evaluates expression strings and adds the resulting value as a to
+   * the end of the line containing the expression as a decoration
+   */
+  const createExpressionDecorations = (input: string, parsedInput: TSON) => {
+    const editorEl = document.getElementById('tson-editor')
+    const styleEl = document.createElement('style')
+    const styleSheet = editorEl.appendChild(styleEl).sheet
+
+    const splitInput = input.split('\n')
+    const decorations = []
+    const expressions = []
+
+    // Find all expressions
+    parsedInput.tunings?.forEach(tuning => {
+      tuning.scales.forEach(scale => {
+        const repeat = scale.repeat ?? scale['repeat ratio']
+
+        if (repeat && typeof repeat === 'string') {
+          expressions.push(repeat)
+        }
+
+        scale.notes.map(note => {
+          let noteString = note
+
+          if (typeof note === 'object') {
+            noteString = note.ratio ?? note['frequency ratio']
+          }
+
+          if (typeof noteString === 'string') {
+            expressions.push(noteString)
+          }
+        })
+      })
+    })
+
+    parsedInput.spectra?.forEach(spectrum => {
+      const partials = spectrum.partials || spectrum['partial distribution']
+      partials.forEach(partial => {
+        const ratio = partial.ratio ?? partial['frequency ratio']
+        const weight = partial.weight ?? partial['amplitude weight']
+
+        if (typeof ratio === 'string') {
+          expressions.push(ratio)
+        }
+
+        if (typeof weight === 'string') {
+          expressions.push(weight)
+        }
+      })
+    })
+
+    // Map expression strings into decoration objects
+    expressions.forEach(expression => {
+      const escapedExpr = expression.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
+
+      splitInput.forEach((line, lineIndex) => {
+        const regex = RegExp(`^(- )?(([a-z]| )+: )?( +)?(${escapedExpr})|("${escapedExpr}")|('${escapedExpr}')$`)
+        if (line.trim().match(regex)) {
+          const rule = `.inline-decoration-${lineIndex + 1}::after {
+            content: 'Value: ${evaluate(expression)}';
+            margin-left: 2em;
+            color: #769cfc;
+            font-style: italic;
+          }`
+          styleSheet.insertRule(rule)
+
+          decorations.push({
+            range: new Range(lineIndex + 1, 0, lineIndex + 1, line.length + 1),
+            options: { afterContentClassName: `inline-decoration-${lineIndex + 1}` }
+          })
+        }
+      })
+    })
+
+    return decorations
+  }
+
+  /**
+   * Creates warnings for errors that aren't captured by the JSON schema
+   */
+  const createMarkers = (input: string, parsedInput: TSON, error: string) => {
+    const markers = []
+
+    if (
+      error.includes('Expression invalid, unable to parse') ||
+      error.includes('Expression must evaluate to a positive number')
+    ) {
+      const badExpression = error.includes('Expression invalid, unable to parse') ? error.slice(38, -1) : error.slice(48, -1)
+
+      const escapedExpr = badExpression.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
+
+      input.split('\n').forEach((line, lineIndex) => {
+        const regex = RegExp(`^(- )?(([a-z]| )+: )?( +)?(${escapedExpr})|("${escapedExpr}")|('${escapedExpr}')$`)
+        if (line.trim().match(regex)) {
+          const index = line.indexOf(badExpression) + 1
+          markers.push({
+            startLineNumber: lineIndex + 1,
+            startColumn: index,
+            endLineNumber: lineIndex + 1,
+            endColumn: index + badExpression.length,
+            message: error
+          })
+        }
+      })
+    } else if (error.includes('The notes array contains frequency ratios that evaluate to the same value')) {
+      const [expression1, expression2] = error.slice(76, -1).split('", "')
+
+      let notes
+      parsedInput.tunings.forEach(tuning => {
+        tuning.scales.forEach(scale => {
+          const reducedNotes = scale.notes.map(note => {
+            if (typeof note === 'object') {
+              return String(note.ratio ?? note['frequency ratio'])
+            }
+
+            return String(note)
+          })
+
+          if (reducedNotes.includes(expression1) && reducedNotes.includes(expression2)) {
+            notes = scale.notes
+          }
+        })
+      })
+
+      const noteLines = YAML.stringify(notes).split('\n')
+      const regexStr = noteLines
+        .map(line => `(${line.trim().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')})`)
+        .join('(\n)( +)?')
+
+      const startLineNumber = input.split(RegExp(regexStr))[0].split('\n').length
+      const startColumn = input.split('\n')[startLineNumber].split('-')[0].length + 1
+      const endLineNumber = startLineNumber + noteLines.length - 2
+      const endColumn = input.split('\n')[endLineNumber - 1].length + 1
+      markers.push({ startLineNumber, startColumn, endLineNumber, endColumn, message: error })
+    }
+
+    return markers
+  }
+
   const onInputChange = (input: string) => {
     let parsedInput = YAML.parse(input)
     let containsErrors = false
-    const markers = []
+    let markers = []
+    let decorations = []
 
+    // Make it a full TSON if this is only a subset
     if (schema === 'tuning') {
       parsedInput = { tunings: [parsedInput] }
     } else if (schema === 'spectrum') {
@@ -114,79 +257,31 @@ const TSONEditor = ({ tson, schema = 'tson', onChange = () => {} }: Props) => {
       parsedInput = { sets: [parsedInput] }
     }
 
+    // Check if the TSON is valid and create markers if not
     try {
       const tson = new TSON()
       tson.load(YAML.stringify(parsedInput))
+      decorations = createExpressionDecorations(input, parsedInput)
     } catch (ex) {
       containsErrors = true
       const error = ex.message.includes('Invalid TSON!') ? ex.message.split('\n')[1].slice(1) : ex.message
-
-      if (
-        error.includes('Expression invalid, unable to parse') ||
-        error.includes('Expression must evaluate to a positive number')
-      ) {
-        const badExpression = error.includes('Expression invalid, unable to parse')
-          ? error.slice(38, -1)
-          : error.slice(48, -1)
-
-        const escapedExpr = badExpression.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
-
-        input.split('\n').forEach((line, lineIndex) => {
-          const regex = RegExp(`^(- )?(([a-z]| )+: )?( +)?(${escapedExpr})|("${escapedExpr}")|('${escapedExpr}')$`)
-          if (line.trim().match(regex)) {
-            const index = line.indexOf(badExpression) + 1
-            markers.push({
-              startLineNumber: lineIndex + 1,
-              startColumn: index,
-              endLineNumber: lineIndex + 1,
-              endColumn: index + badExpression.length,
-              message: error
-            })
-          }
-        })
-      } else if (error.includes('The notes array contains frequency ratios that evaluate to the same value')) {
-        const [expression1, expression2] = error.slice(76, -1).split('", "')
-
-        let notes
-        parsedInput.tunings.forEach(tuning => {
-          tuning.scales.forEach(scale => {
-            const reducedNotes = scale.notes.map(note => {
-              if (typeof note === 'object') {
-                return String(note.ratio ?? note['frequency ratio'])
-              }
-
-              return String(note)
-            })
-
-            if (reducedNotes.includes(expression1) && reducedNotes.includes(expression2)) {
-              notes = scale.notes
-            }
-          })
-        })
-
-        const regexStr = YAML.stringify(notes)
-          .split('\n')
-          .map(line => `(${line.trim().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')})`)
-          .join('(\n)( +)?')
-
-        const startLineNumber = input.split(RegExp(regexStr))[0].split('\n').length
-        const startColumn = input.split('\n')[startLineNumber].split('-')[0].length + 1
-        const endLineNumber = startLineNumber + notes.length - 1
-        const endColumn = input.split('\n')[endLineNumber - 1].length + 1
-        markers.push({ startLineNumber, startColumn, endLineNumber, endColumn, message: error })
-      }
+      markers = createMarkers(input, parsedInput, error)
     }
 
     onChange(input, containsErrors)
 
+    const currentDecorations = tsonEditor.getDecorationsInRange(new Range(0, 0, 9999, 9999))
+    tsonEditor.removeDecorations(currentDecorations.map(d => d.id))
+    tsonEditor.createDecorationsCollection(decorations)
+
     editor.setModelMarkers(
-      editor.getModel(modelUri),
+      tsonEditor.getModel(),
       '',
       markers.map(err => ({ ...err, severity: MarkerSeverity.Warning }))
     )
   }
 
-  return <div className="Editor h-full" ref={divEl}></div>
+  return <div className="Editor h-full" id="tson-editor" ref={divEl}></div>
 }
 
 export default TSONEditor
