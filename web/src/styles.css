@@ -1,0 +1,427 @@
+@font-face {
+  font-family: 'Fira Code';
+  src: url('https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff2/FiraCode-Light.woff2') format('woff2'),
+    url("https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff/FiraCode-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff2/FiraCode-Regular.woff2') format('woff2'),
+    url("https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff/FiraCode-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff2/FiraCode-Medium.woff2') format('woff2'),
+    url("https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff/FiraCode-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff2/FiraCode-SemiBold.woff2') format('woff2'),
+    url("https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff/FiraCode-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff2/FiraCode-Bold.woff2') format('woff2'),
+    url("https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff/FiraCode-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fira Code VF';
+  src: url('https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff2/FiraCode-VF.woff2') format('woff2-variations'),
+       url('https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff/FiraCode-VF.woff') format('woff-variations');
+  /* font-weight requires a range: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide#Using_a_variable_font_font-face_changes */
+  font-weight: 300 700;
+  font-style: normal;
+}
+
+.main-layout {
+  @apply flex min-h-screen flex-col bg-white text-black dark:bg-gray-dark dark:text-white;
+}
+
+.nav-bar {
+  @apply z-50 flex-none sticky top-0 max-w-full border-b border-gray-dark bg-white px-4 pb-1 pt-2 text-lg backdrop-blur-sm dark:border-purple dark:bg-gray-dark md:px-8 md:pb-2 md:pt-3;
+}
+
+.home-link {
+  @apply mr-4 inline-block cursor-pointer hover:text-purple hover:dark:text-pink;
+}
+
+.rw-segment {
+  @apply border-black sm:dark:border-purple w-full overflow-hidden sm:rounded-lg sm:border;
+  scrollbar-color: theme('colors.gray-light') transparent;
+}
+.rw-segment::-webkit-scrollbar {
+  height: initial;
+}
+.rw-segment::-webkit-scrollbar-track {
+  @apply border-gray-light bg-opacity-0 rounded-b-[10px] rounded-t-none border-0 border-t border-solid p-[2px];
+}
+.rw-segment::-webkit-scrollbar-thumb {
+  @apply bg-gray-dark border-opacity-0 rounded-full border-[3px] border-solid bg-clip-content;
+}
+.rw-segment-header {
+  @apply border-black dark:border-purple border-b px-4 py-1 mt-0.5;
+}
+.rw-link {
+  @apply text-purple underline;
+}
+.rw-link:hover {
+  @apply text-purple;
+}
+.rw-heading {
+  @apply font-semibold;
+}
+.rw-heading.rw-heading-primary {
+  @apply text-xl;
+}
+.rw-heading.rw-heading-secondary {
+  @apply text-sm;
+}
+.rw-heading .rw-link {
+  @apply text-white no-underline;
+}
+.rw-cell-error {
+  @apply text-sm font-semibold;
+}
+.rw-form-wrapper {
+  @apply -mt-4 text-sm;
+}
+.rw-cell-error,
+.rw-form-error-wrapper {
+  @apply bg-gray-light text-pink border-pink my-4 rounded border p-4;
+}
+.rw-form-error-title {
+  @apply m-0 font-semibold;
+}
+.rw-form-error-list {
+  @apply mt-2 list-inside list-disc;
+}
+.rw-button {
+  @apply bg-gray-light text-gray-dark flex cursor-pointer rounded border-0 px-4 py-1 text-xs font-semibold leading-loose tracking-wide no-underline transition duration-100;
+}
+.rw-button:hover {
+  @apply bg-gray-dark text-white;
+}
+.rw-button.rw-button-small {
+  @apply rounded-sm px-2 py-1 text-xs;
+}
+.rw-button.rw-button-green {
+  @apply bg-purple text-white;
+}
+.rw-button.rw-button-green:hover {
+  @apply bg-purple;
+}
+.rw-button.rw-button-blue {
+  @apply bg-purple text-white;
+}
+.rw-button.rw-button-blue:hover {
+  @apply bg-purple;
+}
+.rw-button.rw-button-red {
+  @apply bg-pink text-white;
+}
+.rw-button.rw-button-red:hover {
+  @apply bg-pink text-white;
+}
+.rw-button-icon {
+  @apply mr-1 text-xl leading-5;
+}
+.rw-button-group {
+  @apply mx-2 my-3 flex justify-center;
+}
+.rw-button-group .rw-button {
+  @apply mx-1;
+}
+.rw-form-wrapper .rw-button-group {
+  @apply mt-8;
+}
+.rw-label {
+  @apply mt-6 block text-left font-semibold;
+}
+.rw-label.rw-label-error {
+  @apply text-pink;
+}
+.rw-input {
+  @apply border-black dark:border-purple mt-2 block w-full rounded border bg-white dark:bg-gray-dark-accent p-2 focus:outline-none focus:ring-pink focus:ring-2 focus:ring-offset-2 dark:ring-offset-gray-dark;
+}
+.rw-check-radio-items {
+  @apply flex justify-items-center;
+}
+.rw-check-radio-item-none {
+  @apply text-gray-dark;
+}
+.rw-input[type='radio'] {
+  @apply ml-0 mr-1 mt-1 inline w-4;
+}
+.rw-input-error {
+  @apply border-pink text-pink;
+}
+.rw-input-error:focus {
+  @apply border-pink outline-none;
+  box-shadow: 0 0 5px #c53030;
+}
+.rw-field-error {
+  @apply text-pink mt-1 block text-xs font-semibold uppercase;
+}
+.rw-table {
+  @apply w-full text-sm;
+}
+.rw-table th,
+.rw-table td {
+  @apply p-3;
+}
+.rw-table td {
+  @apply dark:bg-gray-dark bg-white;
+}
+.rw-table tr:nth-child(odd) td {
+  @apply dark:bg-gray-dark-accent bg-white-accent;
+}
+.rw-table th {
+  @apply text-left font-semibold whitespace-nowrap;
+}
+.rw-table thead th {
+  @apply text-left;
+}
+.rw-table tbody th {
+  @apply text-right;
+}
+@media (min-width: 768px) {
+  .rw-table tbody th {
+    @apply w-1/5;
+  }
+}
+.rw-table tbody tr {
+  @apply dark:border-purple border-black border-t;
+}
+.rw-table input {
+  @apply ml-0;
+}
+.rw-table-actions {
+  @apply flex h-4 items-center justify-end pr-1;
+}
+.rw-table-actions .rw-button {
+  @apply bg-opacity-0;
+}
+.rw-table-actions .rw-button:hover {
+  @apply bg-gray-dark text-white;
+}
+.rw-table-actions .rw-button-blue {
+  @apply text-purple;
+}
+.rw-table-actions .rw-button-blue:hover {
+  @apply bg-purple text-white;
+}
+.rw-table-actions .rw-button-red {
+  @apply text-pink;
+}
+.rw-table-actions .rw-button-red:hover {
+  @apply bg-pink text-white;
+}
+.rw-text-center {
+  @apply text-center;
+}
+.rw-login-container {
+  @apply mx-auto my-16 flex w-96 flex-wrap items-center justify-center;
+}
+.rw-login-container .rw-form-wrapper {
+  @apply w-full text-center;
+}
+.rw-login-link {
+  @apply text-gray-dark mt-4 w-full text-center text-sm;
+}
+.rw-webauthn-wrapper {
+  @apply mx-4 mt-6 leading-6;
+}
+.rw-webauthn-wrapper h2 {
+  @apply mb-4 text-xl font-bold;
+}
+
+.hamburger-line {
+  @apply h-0.5 w-5 my-0.5 rounded-full bg-black dark:bg-white transition ease-in-out transform duration-300 motion-reduce:duration-0;
+}
+
+.icon-button {
+  @apply cursor-pointer hover:text-purple hover:dark:text-pink;
+}
+
+.icon {
+  @apply h-6 w-6 stroke-2;
+}
+
+.monaco-editor, .overflow-guard {
+  @apply sm:rounded-b-lg;
+  --vscode-scrollbar-shadow: none;
+}
+
+.monaco-editor .mtk22 {
+  @apply !text-pink;
+}
+
+.monaco-editor .mtk7 {
+  @apply !text-purple dark:!text-purple-light;
+}
+
+.monaco-editor .mtk5 {
+  @apply !text-black dark:!text-white;
+}
+
+.monaco-editor .mtk1 {
+  @apply !text-black dark:!text-white-accent;
+}
+
+.monaco-editor .mtk8 {
+  @apply !text-black dark:!text-white-accent opacity-80 italic;
+}
+
+.monaco-editor .monaco-hover {
+  @apply !bg-white dark:!bg-editor-gray !text-black dark:!text-white !border-black dark:!border-purple;
+}
+
+.monaco-editor .actions {
+  @apply !bg-white dark:!bg-editor-gray !text-black dark:!text-white;
+}
+
+.monaco-editor .monaco-hover a {
+  @apply !text-purple dark:!text-pink;
+}
+
+.monaco-editor .slider {
+  @apply dark:!bg-purple dark:opacity-50;
+}
+
+.monaco-editor .margin-view-overlays, .monaco-editor .monaco-editor-background, .monaco-editor .margin, .monaco-editor .overflow-guard {
+  @apply !bg-white dark:!bg-editor-gray;
+}
+
+.monaco-editor .line-numbers {
+  @apply !text-black dark:!text-white !opacity-70;
+}
+
+.monaco-editor .active-line-number {
+  @apply !opacity-100;
+}
+
+.monaco-editor .action-item {
+  @apply dark:text-white dark:hover:text-pink;
+}
+
+.monaco-editor .peekview-title .filename, .monaco-editor .descriptioncontainer .source, .monaco-editor .descriptioncontainer .code {
+  @apply hidden;
+}
+
+.monaco-editor .peekview-title .dirname {
+  @apply dark:!text-white;
+}
+
+.monaco-editor .body {
+  @apply !bg-white dark:!bg-editor-gray dark:text-white dark:bg-opacity-100
+}
+
+.monaco-editor .cursor {
+  @apply dark:!bg-white;
+}
+
+.monaco-editor .view-overlays .current-line {
+  @apply !border-purple dark:!border-0 !opacity-20 dark:!bg-purple;
+}
+
+.monaco-editor .selected-text, .monaco-editor .wordHighlightText {
+  @apply !bg-purple opacity-30 dark:opacity-40;
+}
+
+.monaco-editor .scrollbar .vertical {
+  @apply !shadow-none !shadow-inner;
+}
+
+.monaco-editor .lines-content .core-guide-indent-active {
+  @apply !shadow-pink !shadow-[1px_0_0_0_inset] opacity-60 dark:opacity-100;
+}
+
+.monaco-editor .lines-content .core-guide-indent {
+  @apply !shadow-purple !shadow-[1px_0_0_0_inset] opacity-60 dark:opacity-100;
+}
+
+.monaco-editor .find-widget, .monaco-editor .findOptionsWidget {
+  @apply dark:!shadow-none dark:!border dark:!border-t-0 !bg-white dark:!bg-editor-gray dark:!text-white dark:!border-purple;
+}
+
+.monaco-editor .overlayWidgets .quick-input-widget {
+  @apply rounded-t-none dark:!shadow-none dark:!border dark:!border-t-0 !bg-white dark:!bg-editor-gray dark:!text-white dark:!border-purple;
+}
+
+.dark .monaco-editor {
+  --vscode-widget-border: theme('colors.purple');
+}
+
+.monaco-editor .find-widget.no-results .matchesCount {
+  @apply !text-pink;
+}
+
+.monaco-editor .find-widget .monaco-sash {
+  @apply !bg-purple;
+}
+
+.monaco-editor .monaco-findInput .monaco-inputbox, .monaco-editor .monaco-list-rows {
+  @apply dark:!bg-gray-dark dark:text-white;
+}
+
+.monaco-editor .input {
+  @apply dark:!text-white focus:ring-0 focus:outline-none;
+}
+
+.monaco-editor .codicon::before {
+  @apply dark:!text-white;
+}
+
+.monaco-editor .monaco-list-row.focused {
+  @apply !bg-purple/50 rounded-none;
+}
+
+.monaco-editor .monaco-list-row {
+  @apply hover:!bg-purple/50 hover:rounded-none;
+}
+
+.monaco-editor .suggest-widget, .monaco-editor .suggest-details {
+  @apply dark:!shadow-none dark:!border !bg-white dark:!bg-editor-gray dark:!text-white dark:!border-purple;
+}
+
+.monaco-editor .monaco-highlighted-label .highlight {
+  @apply !text-pink;
+}
+
+.monaco-editor .monaco-highlighted-label {
+  @apply dark:text-white;
+}
+
+.monaco-editor .quick-input-list-separator {
+  @apply !text-pink;
+}
+
+.editor-button-group {
+  @apply flex absolute flex-col items-center gap-3 right-2 top-20 p-2 mt-1 z-50 bg-white dark:bg-gray-dark border border-black dark:border-purple rounded sm:mt-0 sm:p-0 sm:border-0 sm:top-0 sm:gap-0 sm:relative sm:!flex sm:flex-row;
+}
+
+.checkbox {
+  @apply relative -top-px h-4 w-4 appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-black outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-none before:opacity-0 before:content-[''] checked:border-black checked:bg-none checked:before:opacity-[0.16] checked:after:absolute checked:after:-mt-1 checked:after:ml-1 checked:after:block checked:after:h-4 checked:after:w-2 checked:after:rotate-45 checked:after:border-4 checked:after:border-l-0 checked:after:border-t-0 checked:after:border-solid checked:after:border-pink checked:after:bg-none checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:content-[''] checked:focus:before:scale-100 checked:focus:after:-mt-1 checked:focus:after:ml-1 checked:focus:after:h-4 checked:focus:after:w-2 checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-4 checked:focus:after:border-l-0 checked:focus:after:border-t-0 checked:focus:after:border-solid checked:focus:after:border-pink checked:focus:after:bg-none dark:border-white dark:checked:border-white dark:checked:bg-none;
+}
+
+.monaco-editor .monaco-editor-overlaymessage .message {
+  @apply dark:!shadow-none dark:!border !border-black !bg-white dark:!bg-editor-gray dark:!text-white dark:!border-purple;
+}
+
+.monaco-editor .monaco-editor-overlaymessage .anchor.below {
+  @apply !border-t-black dark:!border-t-purple;
+}

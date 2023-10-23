@@ -4,13 +4,20 @@ import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
+import './styles.css'
+
+if (process.env.NODE_ENV !== 'production') {
+  const ReactDOM = require('react-dom')
+  const axe = require('@axe-core/react')
+  axe(React, ReactDOM, 1000)
+}
+
 import './index.css'
 
 const App = () => {
   if (
     localStorage.theme === 'dark' ||
-    (!('theme' in localStorage) &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches)
+    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
   ) {
     document.documentElement.classList.add('dark')
   } else {
